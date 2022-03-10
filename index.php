@@ -49,14 +49,50 @@
         <div class="col col-lg-8">
             <div class="card">
                 <div class="card-body">
-                    This is some text within a card body.
+                    <div class="card" style="margin-top: 5px;">
+                        <div class="card-header">
+                            Featured
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Special title treatment</h5>
+                            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                            <a href="#" class="btn btn-primary">Go somewhere</a>
+                        </div>
+                        <div class="card-footer text-muted">
+                            Author: Mitko | Published: 10/03/2022 | Comments: 2
+                        </div>
+                    </div>
+                    <div class="card" style="margin-top: 5px;">
+                        <div class="card-header">
+                            Featured
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Special title treatment</h5>
+                            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                            <a href="#" class="btn btn-primary">Go somewhere</a>
+                        </div>
+                        <div class="card-footer text-muted">
+                            Author: Mitko | Published: 10/03/2022 | Comments: 2
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="col col-sm-4">
             <div class="card">
                 <div class="card-body">
-                    This is some text within a card body.
+                    <div class="list-group">
+                        <a href="#" class="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true">
+                            <img src="https://github.com/twbs.png" alt="twbs" width="32" height="32" class="rounded-circle flex-shrink-0">
+                            <div class="d-flex gap-2 w-100 justify-content-between">
+                                <div>
+                                    <h6 class="mb-0">List group item heading</h6>
+                                    <p class="mb-0 opacity-75">Some placeholder content in a paragraph.</p>
+                                </div>
+                                <small class="opacity-50 text-nowrap">now</small>
+                            </div>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
