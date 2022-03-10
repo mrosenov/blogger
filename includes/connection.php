@@ -1,11 +1,9 @@
 <?php
-$connection = mysqli_connect('localhost','root','','udemy2');
+$DBHost = 'localhost';
+$DBUsername = 'root';
+$DBPassword = '';
+$DBTable = 'udemy2';
 
-if ($connection) {
-    echo "Connected to the database successfully!";
-}
-else {
-    die("Couldn't connect to the database.");
-}
+$connection = mysqli_connect($DBHost,$DBUsername,$DBPassword,$DBTable);
 
 ?>
