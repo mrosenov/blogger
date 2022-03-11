@@ -23,7 +23,6 @@ function edit_category() {
         $result = mysqli_query($connection, $query);
 
         while ($row = mysqli_fetch_assoc($result)) {
-            $catID = $row['catID'];
             $cat_title = $row['catTitle'];
         }
         echo '

@@ -24,9 +24,7 @@
                         <div class="card-header">
                             <h3 class="card-title">Add Category</h3>
                         </div>
-                        <?php
-                            create_category();
-                        ?>
+                        <?php create_category(); ?>
                         <form action="" method="post">
                             <div class="card-body">
                                 <div class="form-group">
@@ -38,9 +36,7 @@
                             </div>
                         </form>
                     </div>
-                    <?php
-                    edit_category();
-                    ?>
+                    <?php edit_category(); ?>
 
                 </div>
                 <div class="col-md-6">

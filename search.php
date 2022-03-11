@@ -11,28 +11,32 @@
                     if (isset($_POST['search'])){
                         $search_result = $_POST['searchstr'];
 
-                        $query = "SELECT * FROM posts WHERE post_tags LIKE '%$search_result%'";
-                        $result = mysqli_query($connection, $query);
+                        $query = "SELECT * FROM posts WHERE post_tags OR post_author LIKE '%$search_result%'";
+                        $result = mysqli_query($connection,$query);
                         if (!$result){
                             die('Could not find anything.');
                         }
                         $count = mysqli_num_rows($result);
                         if ($count == 0){
-                            echo "No results";
+                            echo "
+                            <div class='alert alert-danger' role='alert'>
+                              Nothing was found
+                            </div>                            
+                            ";
                         }
                         else {
-                            $query = "SELECT * FROM posts WHERE post_tags LIKE '%$search_result%'";
+                            $query = "SELECT * FROM posts WHERE post_tags OR post_author LIKE '%$search_result%'";
                             $result = mysqli_query($connection,$query);
 
                             while ($row = mysqli_fetch_assoc($result)){
                                 $post_title = $row['post_title'];
                                 $post_author = $row['post_author'];
-                                $post_date = $row['post_date'];
                                 $post_image = $row['post_image'];
                                 $post_content = $row['post_content'];
                                 $post_tags = $row['post_tags'];
                                 $post_comments_count = $row['post_comments_count'];
                                 $post_status = $row['post_status'];
+                                $post_date = $row['created_at'];
 
                                 echo "
                     <div class='card' style='margin-top: 5px;'>
