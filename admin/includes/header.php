@@ -1,6 +1,5 @@
-<?php
-    include "../includes/connection.php"
-?>
+<?php include "../includes/connection.php" ?>
+<?php include('functions.php'); ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
