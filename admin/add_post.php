@@ -5,7 +5,7 @@ create_post();
         <div class="card-header">
             <h3 class="card-title">Add Post</h3>
         </div>
-        <form action="" method="post" enctype="multipart/form-data">
+        <form action="" method="post">
             <div class="card-body">
                 <div class="form-group">
                     <select name="categoryID" class="form-control">
@@ -38,7 +38,8 @@ create_post();
                     <input name="post_tags" type="text" class="form-control" id="post_tags" placeholder="Tags">
                 </div>
                 <div class="form-group">
-                    <select name="post_status" class="form-control">
+                    <label for="post_status">Post Status</label>
+                    <select name="post_status" class="form-control" id="post_status">
                         <option value="draft">Draft</option>
                         <option value="approved">Approved</option>
                     </select>

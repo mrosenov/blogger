@@ -49,7 +49,7 @@
                                                         <td>$post_date</td>
                                                         <td>$created_at</td>
                                                         <td>$updated_at</td>
-                                                        <td><a href='posts.php?delete=$postID' class='btn btn-danger'>Delete</a> <a href='posts.php?edit=$postID' class='btn btn-warning'>Edit</a> <a href='posts.php?view=$postID' class='btn btn-primary'>View</a></td>
+                                                        <td><a href='posts.php?delete=$postID' class='btn btn-danger'>Delete</a> <a href='posts.php?source=edit_post&p_id=$postID' class='btn btn-warning'>Edit</a> <a href='posts.php?view=$postID' class='btn btn-primary'>View</a></td>
                                                     </tr>
                                                     ";
                         }

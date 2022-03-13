@@ -39,8 +39,65 @@ function create_post(){
         else {
             $query = "INSERT INTO posts (catID,post_title,post_author,post_content,post_tags,post_status,post_date,created_at,updated_at) VALUES ('$categoryID','$post_title','$post_author','$post_content','$post_tags','$post_status','$post_date','$created_at','$updated_at')";
             $result = mysqli_query($connection,$query);
-            echo "<script type='text/javascript'>toastr.success('Post added successfully.')</script>";
+
+            if ($result){
+                echo "<script type='text/javascript'>toastr.success('Post added successfully.')</script>";
+            }
+            else{
+                echo "<script type='text/javascript'>toastr.error('Could not add the post.')</script>";
+            }
+
         }
+    }
+}
+
+function edit_post(){
+    global $connection;
+    if (isset($_POST['edit_post'])){
+        $categoryID = mysqli_real_escape_string($connection,$_POST['categoryID']);
+        $post_title = mysqli_real_escape_string($connection,$_POST['post_title']);
+        $post_author = mysqli_real_escape_string($connection,$_POST['post_author']);
+        $post_content = mysqli_real_escape_string($connection,$_POST['post_content']);
+        $post_tags = mysqli_real_escape_string($connection,$_POST['post_tags']);
+        $post_status = mysqli_real_escape_string($connection,$_POST['post_status']);
+        $post_date = mysqli_real_escape_string($connection,$_POST['post_date']);
+        $updated_at = date("Y-m-d h:i:sa");
+
+        if ($categoryID == "" || empty($categoryID)){
+            echo "<script type='text/javascript'>toastr.error('Select Category.')</script>";
+        }
+        elseif ($post_title == "" || empty($post_title)){
+            echo "<script type='text/javascript'>toastr.error('Please add title.')</script>";
+        }
+        elseif ($post_author == "" || empty($post_author)){
+            echo "<script type='text/javascript'>toastr.error('Please add author.')</script>";
+        }
+        elseif ($post_content == "" || empty($post_content)){
+            echo "<script type='text/javascript'>toastr.error('Please add content.')</script>";
+        }
+        elseif ($post_tags == "" || empty($post_tags)){
+            echo "<script type='text/javascript'>toastr.error('Please add tags.')</script>";
+        }
+        elseif ($post_status == "" || empty($post_status)){
+            echo "<script type='text/javascript'>toastr.error('Please add status.')</script>";
+        }
+        elseif ($post_date == "" || empty($post_date)){
+            echo "<script type='text/javascript'>toastr.error('Please add date.')</script>";
+        }
+        else {
+            echo $PostID = $_GET['p_id'];
+            $query = "UPDATE posts SET catID = '$categoryID',post_title = '$post_title',post_author = '$post_author',post_content = '$post_content',post_tags = '$post_tags',post_status = '$post_status',post_date = '$post_date', updated_at = '$updated_at' WHERE postID = '$PostID'";
+
+            $result = mysqli_query($connection,$query);
+            if ($result){
+                echo "<script type='text/javascript'>toastr.success('Post updated successfully.')</script>";
+            }
+            else {
+                echo "<script type='text/javascript'>toastr.error('Could not update the post.')</script>";
+            }
+        }
+
+
     }
 }
 
@@ -70,7 +127,12 @@ function create_category() {
         else {
             $query = "INSERT INTO categories (catTitle) VALUES ('$cat_title')";
             $result = mysqli_query($connection,$query);
-            echo "<script type='text/javascript'>toastr.success('Category added successfully.')</script>";
+            if ($result){
+                echo "<script type='text/javascript'>toastr.success('Category added successfully.')</script>";
+            }
+            else {
+                echo "<script type='text/javascript'>toastr.error('Could not add the category.')</script>";
+            }
         }
     }
 }
@@ -109,7 +171,12 @@ function edit_category() {
             } else {
                 $query = "UPDATE categories SET catTitle = '$cat_title' WHERE catID = $catID";
                 $result = mysqli_query($connection, $query);
-                echo "<script type='text/javascript'>toastr.success('Category updated successfully.')</script>";
+                if ($result){
+                    echo "<script type='text/javascript'>toastr.success('Category updated successfully.')</script>";
+                }
+                else{
+                    echo "<script type='text/javascript'>toastr.error('Could not edit the category')</script>";
+                }
             }
         }
     }
