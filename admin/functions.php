@@ -123,7 +123,6 @@ function delete_category() {
         $result = mysqli_query($connection,$query);
         if ($result){
             echo "<script type='text/javascript'>toastr.success('Category deleted successfully.')</script>";
-            echo "<script type='text/javascript'>location.reload();</script>";
         }
         else {
             echo"<script type='text/javascript'>toastr.error('Couldnt delete the category.')</script>";
