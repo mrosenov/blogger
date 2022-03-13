@@ -15,7 +15,6 @@
                         while ($row = mysqli_fetch_assoc($result)){
                             $post_title = $row['post_title'];
                             $post_author = $row['post_author'];
-                            $post_image = $row['post_image'];
                             $post_content = $row['post_content'];
                             $post_tags = $row['post_tags'];
                             $post_comments_count = $row['post_comments_count'];
