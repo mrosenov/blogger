@@ -3,7 +3,7 @@ edit_post();
 ?>
 <div class="card card-primary">
     <div class="card-header">
-        <h3 class="card-title">Add Post</h3>
+        <h3 class="card-title">Edit Post</h3>
     </div>
     <?php
         if (isset($_GET['p_id'])){

@@ -85,7 +85,7 @@ function edit_post(){
             echo "<script type='text/javascript'>toastr.error('Please add date.')</script>";
         }
         else {
-            echo $PostID = $_GET['p_id'];
+            $PostID = $_GET['p_id'];
             $query = "UPDATE posts SET catID = '$categoryID',post_title = '$post_title',post_author = '$post_author',post_content = '$post_content',post_tags = '$post_tags',post_status = '$post_status',post_date = '$post_date', updated_at = '$updated_at' WHERE postID = '$PostID'";
 
             $result = mysqli_query($connection,$query);
@@ -115,7 +115,6 @@ function delete_post() {
         }
     }
 }
-
 
 function create_category() {
     global $connection;

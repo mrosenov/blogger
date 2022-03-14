@@ -43,7 +43,7 @@
                         include ('includes/list_all_posts.php');
                         break;
                 }
-                delete_post();
+
                 ?>
 
             </div>
