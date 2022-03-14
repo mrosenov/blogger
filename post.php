@@ -37,13 +37,27 @@
                             Author: <?php echo $post_author; ?> | Published: <?php echo $post_date; ?>
                         </div>
                     </div>
-
+                    <?php
+                        if (isset($_POST['create_comment']))
+                            echo $_POST['comment_author'];
+                    ?>
                     <section class="mb-5" style="margin-top: 5px;">
                         <div class="card bg-light">
                             <div class="card-body">
-                                <form class="mb-4">
-                                    <textarea class="form-control" rows="3" placeholder="Join the discussion and leave a comment!"></textarea>
-                                    <button class="btn btn-sm btn-info" style="margin-top: 2px;">Post Comment</button>
+                                <form action="" method="post" class="mb-4">
+                                    <div class="form-group" style="margin-bottom: 10px;">
+                                        <input name="comment_author" type="text" class="form-control" placeholder="Author">
+                                    </div>
+                                    <div class="form-group" style="margin-bottom: 10px;">
+                                        <input name="comment_email" type="email" class="form-control" placeholder="Email">
+                                    </div>
+                                    <div class="form-group">
+                                        <textarea name="comment_content" class="form-control" rows="3" placeholder="Join the discussion and leave a comment!" style="max-height: 150px;"></textarea>
+                                    </div>
+                                    <div class="form-group d-grid gap-2 d-md-flex justify-content-md-end">
+                                        <button name="create_comment" type="submit" class="btn btn-sm btn-info md-2" style="margin-top: 10px;">Post Comment</button>
+                                    </div>
+
                                 </form>
                                 <div class="d-flex mb-4">
                                     <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..."></div>

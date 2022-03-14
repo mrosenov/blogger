@@ -38,7 +38,7 @@ $current_page = PageName();
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link <?php echo $current_page == 'comments.php' ? 'active':NULL ?>">
+                    <a href="comments.php" class="nav-link <?php echo $current_page == 'comments.php' ? 'active':NULL ?>">
                         <i class="nav-icon fas fa-comments"></i>
                         <p>
                             Comments

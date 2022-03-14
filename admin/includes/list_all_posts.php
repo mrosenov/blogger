@@ -17,7 +17,7 @@
                             <th class="sorting">Tags</th>
                             <th class="sorting">Comments</th>
                             <th class="sorting">Status</th>
-                            <th class="sorting">Date</th>
+                            <th class="sorting">Published</th>
                             <th class="sorting">Created At</th>
                             <th class="sorting">Last Updated</th>
                             <th class="sorting">Actions</th>
@@ -41,20 +41,19 @@
                             $updated_at = $row['updated_at'];
 
                             echo "
-                                                    <tr class='odd'>
-                                                        <td>$postID</td>
-                                                        <td>$category_title</td>
-                                                        <td>$post_title</td>
-                                                        <td>$post_author</td>
-                                                        <td>$post_tags</td>
-                                                        <td>$post_comments</td>
-                                                        <td>$post_status</td>
-                                                        <td>$post_date</td>
-                                                        <td>$created_at</td>
-                                                        <td>$updated_at</td>
-                                                        <td><a href='posts.php?delete=$postID' class='btn btn-danger'>Delete</a> <a href='posts.php?source=edit_post&p_id=$postID' class='btn btn-warning'>Edit</a> <a href='posts.php?view=$postID' class='btn btn-primary'>View</a></td>
-                                                    </tr>
-                                                    ";
+                            <tr class='odd'>
+                                <td>$postID</td>
+                                <td>$category_title</td>
+                                <td>$post_title</td>
+                                <td>$post_author</td>
+                                <td>$post_tags</td>
+                                <td>$post_comments</td>
+                                <td>$post_status</td>
+                                <td>$post_date</td>
+                                <td>$created_at</td>
+                                <td>$updated_at</td>
+                                <td><a href='posts.php?delete=$postID' class='btn btn-danger'>Delete</a> <a href='posts.php?source=edit_post&p_id=$postID' class='btn btn-warning'>Edit</a> <a href='posts.php?view=$postID' class='btn btn-primary'>View</a></td>
+                            </tr>";
 
                         }
                         ?>
