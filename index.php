@@ -13,6 +13,7 @@
                         $result = mysqli_query($connection,$query);
 
                         while ($row = mysqli_fetch_assoc($result)){
+                            $postID = $row['postID'];
                             $post_title = $row['post_title'];
                             $post_author = $row['post_author'];
                             $post_content = $row['post_content'];
@@ -24,13 +25,13 @@
                             echo "
                     <div class='card' style='margin-top: 5px;'>
                         <div class='card-header'>
-                            $post_title
+                            <a href='posts.php?p_id=$postID'>$post_title</a>
                         </div>
                         <div class='card-body'>
                             <p class='card-text'>$post_content</p>
                         </div>
                         <div class='card-footer text-muted'>
-                            Author: $post_author | Published: $post_date | Comments: $post_comments_count | <a href='#' class=''>Read More</a>
+                            Author: $post_author | Published: $post_date | Comments: $post_comments_count | <a href='posts.php?p_id=$postID' class='btn btn-sm btn-dark'>Read More</a>
                         </div>
                     </div>                            
                             ";

@@ -21,8 +21,9 @@
                             $query = "SELECT * FROM categories";
                             $result = mysqli_query($connection, $query);
                             while ($row = mysqli_fetch_assoc($result)){
+                                $CategoryID = $row['catID'];
                                 $cat_title = $row['catTitle'];
-                                echo "<li><a class='dropdown-item' href='#'>$cat_title</a></li>";
+                                echo "<li><a class='dropdown-item' href='category.php?cat=$CategoryID'>$cat_title</a></li>";
                             }
                         ?>
                     </ul>
