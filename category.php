@@ -24,7 +24,7 @@
                                     $postID = $row['postID'];
                                     $post_title = $row['post_title'];
                                     $post_author = $row['post_author'];
-                                    $post_content = $row['post_content'];
+                                    $post_content = substr($row['post_content'],0,400);
                                     $post_tags = $row['post_tags'];
                                     $post_comments_count = $row['post_comments_count'];
                                     $post_status = $row['post_status'];
