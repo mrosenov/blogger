@@ -13,6 +13,7 @@
 
                         $query = "SELECT * FROM posts WHERE post_tags LIKE '%$search_result%'";
                         $result = mysqli_query($connection,$query);
+
                         if (!$result){
                             die('Could not find anything.');
                         }

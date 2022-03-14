@@ -43,7 +43,7 @@
                             <div class="card-body">
                                 <form class="mb-4">
                                     <textarea class="form-control" rows="3" placeholder="Join the discussion and leave a comment!"></textarea>
-                                    <button class="btn btn-sm btn-info" style="margin-top: 2px; float: right;">Post Comment</button>
+                                    <button class="btn btn-sm btn-info" style="margin-top: 2px;">Post Comment</button>
                                 </form>
                                 <div class="d-flex mb-4">
                                     <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..."></div>
