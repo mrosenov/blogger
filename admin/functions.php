@@ -236,7 +236,7 @@ function list_categories() {
     $query = "SELECT * FROM categories";
     $result = mysqli_query($connection,$query);
 
-    if (mysqli_num_rows($result) === 0 ){
+    if (mysqli_num_rows($result) == 0 ){
         echo "
         <div class='alert alert-danger' role='alert'>
           There are no categories
@@ -310,22 +310,25 @@ function unapprove_comment(){
     global $connection;
 
     if (isset($_GET['unapprove'])){
-        echo $commentID = $_GET['unapprove'];
-        $query = "UPDATE comments SET comment_status = 'Unapprove' WHERE comment_ID = '$commentID'";
-        $result = mysqli_query($connection, $query);
-
         if (isset($_GET['p_id'])){
+            $commentID = $_GET['unapprove'];
             $PostID = $_GET['p_id'];
-            $count_query = "UPDATE posts SET post_comments_count = post_comments_count - 1 WHERE postID = '$PostID'";
-            $update_count = mysqli_query($connection, $count_query);
+            $CheckStatus = "SELECT * FROM comments WHERE comment_ID = '$commentID'";
+            $CheckResult = mysqli_query($connection,$CheckStatus);
+            while ($row = mysqli_fetch_assoc($CheckResult)){
+                $comment_status = $row['comment_status'];
+                if ($comment_status == 'Unapproved'){
+                    echo "<script type='text/javascript'>toastr.error('The comment is already unapproved.')</script>";
+                }
+                elseif($comment_status == 'Approved'){
+                    $count_query = "UPDATE posts SET post_comments_count = post_comments_count - 1 WHERE postID = '$PostID'";
+                    $update_count = mysqli_query($connection, $count_query);
+                    echo "<script type='text/javascript'>toastr.success('Comment unapproved successfully.')</script>";
+                }
+            }
         }
-
-        if ($result){
-            echo "<script type='text/javascript'>toastr.success('Comment unapproved successfully.')</script>";
-        }
-        else{
-            echo "<script type='text/javascript'>toastr.error('Could not unapprove the comment.')</script>";
-        }
+        $query = "UPDATE comments SET comment_status = 'Unapproved' WHERE comment_ID = '$commentID'";
+        $result = mysqli_query($connection, $query);
     }
 }
 
@@ -333,21 +336,24 @@ function approve_comment(){
     global $connection;
 
     if (isset($_GET['approve'])){
-        $commentID = $_GET['approve'];
-        $query = "UPDATE comments SET comment_status = 'Approved' WHERE comment_ID = '$commentID';";
-        $result = mysqli_query($connection, $query);
-
         if (isset($_GET['p_id'])){
-            $PostID = $_GET['p_id'];
-            $count_query = "UPDATE posts SET post_comments_count = post_comments_count + 1 WHERE postID = '$PostID'";
-            $update_count = mysqli_query($connection, $count_query);
-        }
-
-        if ($result){
-            echo "<script type='text/javascript'>toastr.success('Comment approved successfully.')</script>";
-        }
-        else{
-            echo "<script type='text/javascript'>toastr.error('Could not approve the comment.')</script>";
+            $commentID = $_GET['approve'];
+            $CheckStatus = "SELECT * FROM comments WHERE comment_ID = '$commentID'";
+            $CheckResult = mysqli_query($connection,$CheckStatus);
+            while ($row = mysqli_fetch_assoc($CheckResult)){
+                $comment_status = $row['comment_status'];
+                if ($comment_status == 'Approved'){
+                    echo "<script type='text/javascript'>toastr.error('The comment is already approved.')</script>";
+                }
+                elseif($comment_status == 'Unapproved'){
+                    $PostID = $_GET['p_id'];
+                    $count_query = "UPDATE posts SET post_comments_count = post_comments_count + 1 WHERE postID = '$PostID'";
+                    $update_count = mysqli_query($connection, $count_query);
+                    echo "<script type='text/javascript'>toastr.success('Comment approved successfully.')</script>";
+                }
+            }
+            $query = "UPDATE comments SET comment_status = 'Approved' WHERE comment_ID = '$commentID';";
+            $result = mysqli_query($connection, $query);
         }
     }
 }
