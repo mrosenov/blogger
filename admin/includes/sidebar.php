@@ -46,7 +46,7 @@ $current_page = PageName();
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link <?php echo $current_page == 'listusers.php' ? 'active':NULL ?>">
+                    <a href="users.php" class="nav-link <?php echo $current_page == 'users.php' ? 'active':NULL ?>">
                         <i class="nav-icon fas fa-users"></i>
                         <p>
                             Users
