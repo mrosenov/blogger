@@ -19,7 +19,6 @@ edit_post();
                 $post_content = $row['post_content'];
                 $post_tags = $row['post_tags'];
                 $post_status = $row['post_status'];
-                $post_date = $row['post_date'];
             }
         }
     ?>
@@ -69,13 +68,9 @@ edit_post();
                     <option value="approved">Approved</option>
                 </select>
             </div>
-            <div class="form-group">
-                <label for="post_date">Date</label>
-                <input name="post_date" type="datetime-local" class="form-control" id="post_date" >
-            </div>
         </div>
         <div class="card-footer">
-            <button name="edit_post" type="submit" class="btn btn-primary">Add Post</button>
+            <button name="edit_post" type="submit" class="btn btn-primary">Edit Post</button>
         </div>
     </form>
 </div>

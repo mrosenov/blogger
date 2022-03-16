@@ -25,37 +25,36 @@
                         </thead>
                         <tbody>
                         <?php
-                        $query = "SELECT * FROM posts LEFT JOIN categories ON posts.catID = categories.catID";
-                        $result = mysqli_query($connection,$query);
-                        while ($row = mysqli_fetch_assoc($result)) {
-                            $postID = $row['postID'];
-                            $category_title = $row['catTitle'];
-                            $catID = $row['catID'];
-                            $post_title = $row['post_title'];
-                            $post_author = $row['post_author'];
-                            $post_tags = $row['post_tags'];
-                            $post_comments = $row['post_comments_count'];
-                            $post_status = $row['post_status'];
-                            $post_date = $row['post_date'];
-                            $created_at = $row['created_at'];
-                            $updated_at = $row['updated_at'];
+                            $query = "SELECT * FROM posts LEFT JOIN categories ON posts.catID = categories.catID";
+                            $result = mysqli_query($connection,$query);
+                            while ($row = mysqli_fetch_assoc($result)) {
+                                $postID = $row['postID'];
+                                $category_title = $row['catTitle'];
+                                $catID = $row['catID'];
+                                $post_title = $row['post_title'];
+                                $post_author = $row['post_author'];
+                                $post_tags = $row['post_tags'];
+                                $post_comments = $row['post_comments_count'];
+                                $post_status = $row['post_status'];
+                                $post_date = $row['post_date'];
+                                $created_at = $row['created_at'];
+                                $updated_at = $row['updated_at'];
 
-                            echo "
-                            <tr class='odd'>
-                                <td>$postID</td>
-                                <td>$category_title</td>
-                                <td>$post_title</td>
-                                <td>$post_author</td>
-                                <td>$post_tags</td>
-                                <td>$post_comments</td>
-                                <td>$post_status</td>
-                                <td>$post_date</td>
-                                <td>$created_at</td>
-                                <td>$updated_at</td>
-                                <td><a href='posts.php?delete=$postID' class='btn btn-danger'>Delete</a> <a href='posts.php?source=edit_post&p_id=$postID' class='btn btn-warning'>Edit</a> <a href='posts.php?view=$postID' class='btn btn-primary'>View</a></td>
-                            </tr>";
-
-                        }
+                                echo "
+                                <tr class='odd'>
+                                    <td>$postID</td>
+                                    <td>$category_title</td>
+                                    <td>$post_title</td>
+                                    <td>$post_author</td>
+                                    <td>$post_tags</td>
+                                    <td>$post_comments</td>
+                                    <td>$post_status</td>
+                                    <td>$post_date</td>
+                                    <td>$created_at</td>
+                                    <td>$updated_at</td>
+                                    <td><a href='posts.php?delete=$postID' class='btn btn-danger'>Delete</a> <a href='posts.php?source=edit_post&p_id=$postID' class='btn btn-warning'>Edit</a> <a href='posts.php?view=$postID' class='btn btn-primary'>View</a></td>
+                                </tr>";
+                            }
                         ?>
                         </tbody>
                     </table>

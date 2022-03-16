@@ -37,13 +37,11 @@
                             Author: <?php echo $post_author; ?> | Published: <?php echo $post_date; ?>
                         </div>
                     </div>
-                    <?php
-                        if (isset($_POST['create_comment']))
-                            echo $_POST['comment_author'];
-                    ?>
+                    <?php create_comment(); ?>
                     <section class="mb-5" style="margin-top: 5px;">
                         <div class="card bg-light">
                             <div class="card-body">
+                                <p>Leave a comment</p>
                                 <form action="" method="post" class="mb-4">
                                     <div class="form-group" style="margin-bottom: 10px;">
                                         <input name="comment_author" type="text" class="form-control" placeholder="Author">
@@ -59,7 +57,7 @@
                                     </div>
 
                                 </form>
-                                <div class="d-flex mb-4">
+                                <!--<div class="d-flex mb-4">
                                     <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..."></div>
                                     <div class="ms-3">
                                         <div class="fw-bold">Commenter Name</div>
@@ -72,15 +70,39 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
                                 <!-- Single comment-->
-                                <div class="d-flex">
-                                    <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..."></div>
-                                    <div class="ms-3">
-                                        <div class="fw-bold">Commenter Name</div>
-                                        When I look at the universe and all the ways the universe wants to kill us, I find it hard to reconcile that with statements of beneficence.
-                                    </div>
-                                </div>
+                                <?php
+                                    $query = "SELECT * FROM comments WHERE post_ID = '$PostID' AND comment_status = 'Approved' ORDER BY comment_date DESC";
+                                    $result =  mysqli_query($connection, $query);
+
+                                    $count = mysqli_num_rows($result);
+                                    if ($count == 0){
+                                        echo "
+                                         <div class='alert alert-danger' role='alert'>
+                                          No comments yet.
+                                        </div>";
+                                    }
+                                    else{
+                                        while ($row = mysqli_fetch_assoc($result)){
+                                            $comment_author = $row['comment_author'];
+                                            $comment_content = $row['comment_content'];
+                                            $comment_date = $row['comment_date'];
+
+                                            echo "
+                                        <div class='d-flex' style='margin-bottom: 5px;'>
+                                            <div class='flex-shrink-0'>
+                                                <img class='rounded-circle' src='https://dummyimage.com/50x50/ced4da/6c757d.jpg' alt='...'>
+                                            </div>
+                                            <div class='ms-3'>
+                                                <div class='fw-bold'>$comment_author</div><div class='text-muted'>$comment_date</div>
+                                                $comment_content
+                                            </div>
+                                        </div>";
+                                        }
+                                    }
+
+                                ?>
                             </div>
                         </div>
                     </section>

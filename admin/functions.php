@@ -1,5 +1,44 @@
 <?php
 
+function list_posts(){
+    global $connection;
+    $query = "SELECT * FROM posts WHERE post_status = 'Approved'";
+    $result = mysqli_query($connection,$query);
+
+    $count = mysqli_num_rows($result);
+    if($count == 0){
+        echo "
+                                <div class='alert alert-danger' role='alert'>
+                                  There are no categories
+                                </div>";
+    }
+    else{
+        while ($row = mysqli_fetch_assoc($result)){
+            $postID = $row['postID'];
+            $post_title = $row['post_title'];
+            $post_author = $row['post_author'];
+            $post_content = substr($row['post_content'],0,400);
+            $post_tags = $row['post_tags'];
+            $post_comments_count = $row['post_comments_count'];
+            $post_status = $row['post_status'];
+            $post_date = $row['created_at'];
+
+            echo "
+                            <div class='card' style='margin-top: 5px;'>
+                                <div class='card-header'>
+                                    <a href='post.php?p_id=$postID'>$post_title</a>
+                                </div>
+                                <div class='card-body'>
+                                    <p class='card-text'>$post_content</p>
+                                </div>
+                                <div class='card-footer text-muted'>
+                                    Author: $post_author | Published: $post_date | Comments: $post_comments_count | <a href='post.php?p_id=$postID' class='btn btn-sm btn-dark'>Read More</a>
+                                </div>
+                            </div>";
+        }
+    }
+}
+
 function create_post(){
     global $connection;
     if (isset($_POST['create_post'])){
@@ -60,7 +99,6 @@ function edit_post(){
         $post_content = mysqli_real_escape_string($connection,$_POST['post_content']);
         $post_tags = mysqli_real_escape_string($connection,$_POST['post_tags']);
         $post_status = mysqli_real_escape_string($connection,$_POST['post_status']);
-        $post_date = mysqli_real_escape_string($connection,$_POST['post_date']);
         $updated_at = date("Y-m-d h:i:sa");
 
         if ($categoryID == "" || empty($categoryID)){
@@ -81,12 +119,9 @@ function edit_post(){
         elseif ($post_status == "" || empty($post_status)){
             echo "<script type='text/javascript'>toastr.error('Please add status.')</script>";
         }
-        elseif ($post_date == "" || empty($post_date)){
-            echo "<script type='text/javascript'>toastr.error('Please add date.')</script>";
-        }
         else {
             $PostID = $_GET['p_id'];
-            $query = "UPDATE posts SET catID = '$categoryID',post_title = '$post_title',post_author = '$post_author',post_content = '$post_content',post_tags = '$post_tags',post_status = '$post_status',post_date = '$post_date', updated_at = '$updated_at' WHERE postID = '$PostID'";
+            $query = "UPDATE posts SET catID = '$categoryID',post_title = '$post_title',post_author = '$post_author',post_content = '$post_content',post_tags = '$post_tags',post_status = '$post_status',updated_at = '$updated_at' WHERE postID = '$PostID'";
 
             $result = mysqli_query($connection,$query);
             if ($result){
@@ -217,6 +252,102 @@ function list_categories() {
                                         <td>$cat_title</td>
                                         <td><a href='categories.php?edit=$catID' onclick='ShowEditForm()''>Edit</a> | <a href='categories.php?delete=$catID'>Delete</a></td>
                                     </tr> ";
+        }
+    }
+}
+
+function create_comment(){
+    global $connection;
+    if (isset($_POST['create_comment'])){
+        $PostID = $_GET['p_id'];
+        $comment_author = mysqli_real_escape_string($connection,$_POST['comment_author']);
+        $comment_email = mysqli_real_escape_string($connection,$_POST['comment_email']);
+        $comment_content = mysqli_real_escape_string($connection,$_POST['comment_content']);
+        $comment_date = date("Y-m-d h:i:sa");
+
+
+        if ($comment_author == "" || empty($comment_author)){
+            echo "<script type='text/javascript'>toastr.error('Please add author to the comment.')</script>";
+        }
+        elseif ($comment_email == "" || empty($comment_email)){
+            echo "<script type='text/javascript'>toastr.error('Please add email to the comment.')</script>";
+        }
+        elseif ($comment_content == "" || empty($comment_content)){
+            echo "<script type='text/javascript'>toastr.error('Please add some content to the comment.')</script>";
+        }
+        else{
+            $query = "INSERT INTO comments (post_ID,comment_author,comment_email,comment_content,comment_status,comment_date,created_at,updated_at) VALUES ('$PostID', '$comment_author', '$comment_email','$comment_content','Unpproved','$comment_date','$comment_date','$comment_date')";
+            $result = mysqli_query($connection, $query);
+            $count_query = "UPDATE posts SET post_comments_count = post_comments_count + 1 WHERE postID = '$PostID'";
+            $update_count = mysqli_query($connection, $count_query);
+            if ($result){
+                echo "<script type='text/javascript'>toastr.success('Comment added successfully.')</script>";
+            }
+            else{
+                echo "<script type='text/javascript'>toastr.error('Could not post the comment.')</script>";
+            }
+        }
+    }
+}
+
+function delete_comment(){
+    global $connection;
+
+    if (isset($_GET['delete'])){
+        $commentID = $_GET['delete'];
+        $query = "DELETE FROM comments WHERE comment_ID = '$commentID'";
+        $result = mysqli_query($connection,$query);
+        if ($result){
+            echo "<script type='text/javascript'>toastr.success('Comment deleted successfully.')</script>";
+        }
+        else{
+            echo "<script type='text/javascript'>toastr.error('Could not delete the comment.')</script>";
+        }
+    }
+}
+
+function unapprove_comment(){
+    global $connection;
+
+    if (isset($_GET['unapprove'])){
+        echo $commentID = $_GET['unapprove'];
+        $query = "UPDATE comments SET comment_status = 'Unapprove' WHERE comment_ID = '$commentID'";
+        $result = mysqli_query($connection, $query);
+
+        if (isset($_GET['p_id'])){
+            $PostID = $_GET['p_id'];
+            $count_query = "UPDATE posts SET post_comments_count = post_comments_count - 1 WHERE postID = '$PostID'";
+            $update_count = mysqli_query($connection, $count_query);
+        }
+
+        if ($result){
+            echo "<script type='text/javascript'>toastr.success('Comment unapproved successfully.')</script>";
+        }
+        else{
+            echo "<script type='text/javascript'>toastr.error('Could not unapprove the comment.')</script>";
+        }
+    }
+}
+
+function approve_comment(){
+    global $connection;
+
+    if (isset($_GET['approve'])){
+        $commentID = $_GET['approve'];
+        $query = "UPDATE comments SET comment_status = 'Approved' WHERE comment_ID = '$commentID';";
+        $result = mysqli_query($connection, $query);
+
+        if (isset($_GET['p_id'])){
+            $PostID = $_GET['p_id'];
+            $count_query = "UPDATE posts SET post_comments_count = post_comments_count + 1 WHERE postID = '$PostID'";
+            $update_count = mysqli_query($connection, $count_query);
+        }
+
+        if ($result){
+            echo "<script type='text/javascript'>toastr.success('Comment approved successfully.')</script>";
+        }
+        else{
+            echo "<script type='text/javascript'>toastr.error('Could not approve the comment.')</script>";
         }
     }
 }
