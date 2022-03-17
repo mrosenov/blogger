@@ -26,7 +26,8 @@
                         </thead>
                         <tbody>
                         <?php
-                            $query = "SELECT * FROM users";
+                            //$query = "SELECT * FROM users";
+                            $query = "SELECT * FROM users LEFT JOIN user_roles ON users.user_role = user_roles.role_ID";
                             $result = mysqli_query($connection,$query);
                             while ($row = mysqli_fetch_assoc($result)) {
                                 $user_ID = $row['user_ID'];
@@ -36,7 +37,7 @@
                                 $lastname = $row['lastname'];
                                 $email = $row['email'];
                                 $user_image = $row['user_image'];
-                                $user_role = $row['user_role'];
+                                $user_role = $row['role_name'];
                                 $randSalt = $row['randSalt'];
                                 $created_at = $row['created_at'];
                                 $updated_at = $row['updated_at'];
@@ -44,7 +45,7 @@
                                 echo "
                                 <tr class='odd'>
                                     <td>$user_ID</td>
-                                    <td><a href='../post.php?p_id=$user_ID'>$username</a></td>
+                                    <td>$username</td>
                                     <td>$password</td>
                                     <td>$firstname</td>
                                     <td>$lastname</td>

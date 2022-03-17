@@ -415,4 +415,28 @@ function delete_account(){
         }
     }
 }
+
+function edit_account(){
+    global $connection;
+
+    if (isset($_POST['edit_account'])){
+        $user_ID = $_GET['u_id'];
+        $username = mysqli_real_escape_string($connection,$_POST['username']);
+        $password = mysqli_real_escape_string($connection,$_POST['password']);
+        $firstname = mysqli_real_escape_string($connection,$_POST['firstname']);
+        $lastname = mysqli_real_escape_string($connection,$_POST['lastname']);
+        $email = mysqli_real_escape_string($connection,$_POST['email']);
+        $user_role = mysqli_real_escape_string($connection,$_POST['user_role']);
+        $updated_at = date("Y-m-d h:i:sa");
+        $query = "UPDATE users SET username = '$username',password = '$password',firstname = '$firstname',lastname = '$lastname',email = '$email',user_role='$user_role',updated_at = '$updated_at' WHERE user_ID = '$user_ID'";
+        $result = mysqli_query($connection, $query);
+
+        if ($result){
+            echo "<script type='text/javascript'>toastr.success('Account edited successfully.')</script>";
+        }
+        else{
+            echo "<script type='text/javascript'>toastr.error('Account could not be edited.')</script>";
+        }
+    }
+}
 ?>
