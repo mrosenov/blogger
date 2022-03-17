@@ -6,11 +6,7 @@
         <div id="example2_wrapper" class="dataTables_wrapper dt-bootstrap4">
             <div class="row">
                 <div class="col-sm-12">
-                    <?php
-                        delete_comment();
-                        approve_comment();
-                        unapprove_comment();
-                    ?>
+                    <?php delete_account(); ?>
                     <table class="table table-bordered table-hover dataTable dtr-inline">
                         <thead>
                         <tr>

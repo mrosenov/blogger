@@ -33,7 +33,7 @@ edit_post();
                     while ($row = mysqli_fetch_assoc($result)){
                         $catID = $row['catID'];
                         $category_title = $row['catTitle'];
-                        echo "<option value='$catID' disabled selected>Current: $category_title</option>";
+                        echo "<option value='$catID' selected>Current: $category_title</option>";
                     }
                     $query = "SELECT * FROM categories";
                     $result = mysqli_query($connection,$query);

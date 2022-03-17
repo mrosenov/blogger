@@ -76,7 +76,7 @@ function create_post(){
             echo "<script type='text/javascript'>toastr.error('Please add date.')</script>";
         }
         else {
-            $query = "INSERT INTO posts (catID,post_title,post_author,post_content,post_tags,post_status,post_date,created_at,updated_at) VALUES ('$categoryID','$post_title','$post_author','$post_content','$post_tags','$post_status','$post_date','$created_at','$updated_at')";
+            $query = "INSERT INTO posts (catID,post_title,post_author,post_content,post_tags,post_comments_count,post_status,post_date,created_at,updated_at) VALUES ('$categoryID','$post_title','$post_author','$post_content','$post_tags','0','$post_status','$post_date','$created_at','$updated_at')";
             $result = mysqli_query($connection,$query);
 
             if ($result){
@@ -278,8 +278,6 @@ function create_comment(){
         else{
             $query = "INSERT INTO comments (post_ID,comment_author,comment_email,comment_content,comment_status,comment_date,created_at,updated_at) VALUES ('$PostID', '$comment_author', '$comment_email','$comment_content','Unpproved','$comment_date','$comment_date','$comment_date')";
             $result = mysqli_query($connection, $query);
-            $count_query = "UPDATE posts SET post_comments_count = post_comments_count + 1 WHERE postID = '$PostID'";
-            $update_count = mysqli_query($connection, $count_query);
             if ($result){
                 echo "<script type='text/javascript'>toastr.success('Comment added successfully.')</script>";
             }
@@ -354,6 +352,66 @@ function approve_comment(){
             }
             $query = "UPDATE comments SET comment_status = 'Approved' WHERE comment_ID = '$commentID';";
             $result = mysqli_query($connection, $query);
+        }
+    }
+}
+
+function create_account(){
+    global $connection;
+
+    if (isset($_POST['create_account'])){
+        $username = mysqli_real_escape_string($connection,$_POST['username']);
+        $password = mysqli_real_escape_string($connection,$_POST['password']);
+        $firstname = mysqli_real_escape_string($connection,$_POST['firstname']);
+        $lastname = mysqli_real_escape_string($connection,$_POST['lastname']);
+        $email = mysqli_real_escape_string($connection,$_POST['email']);
+        $user_role = mysqli_real_escape_string($connection,$_POST['user_role']);
+        $created_at = date("Y-m-d h:i:sa");
+        $updated_at = date("Y-m-d h:i:sa");
+
+        if ($username == "" || empty($username)){
+            echo "<script type='text/javascript'>toastr.error('Please add username')</script>";
+        }
+        elseif ($password == "" || empty($password)){
+            echo "<script type='text/javascript'>toastr.error('Please add password.')</script>";
+        }
+        elseif ($firstname == "" || empty($firstname)){
+            echo "<script type='text/javascript'>toastr.error('Please add firstname.')</script>";
+        }
+        elseif ($lastname == "" || empty($lastname)){
+            echo "<script type='text/javascript'>toastr.error('Please add lastname.')</script>";
+        }
+        elseif ($email == "" || empty($email)){
+            echo "<script type='text/javascript'>toastr.error('Please add email.')</script>";
+        }
+        elseif ($user_role == "" || empty($user_role)){
+            echo "<script type='text/javascript'>toastr.error('Please add role.')</script>";
+        }
+        else {
+            $query = "INSERT INTO users (username,password,firstname,lastname,email,user_role,created_at,updated_at) VALUES ('$username','$password','$firstname','$lastname','$email','$user_role','$created_at','$updated_at')";
+            $result = mysqli_query($connection, $query);
+            if ($result){
+                echo "<script type='text/javascript'>toastr.success('Account created successfully.')</script>";
+            }
+            else {
+                echo "<script type='text/javascript'>toastr.error('Account could not be created.')</script>";
+            }
+        }
+    }
+}
+
+function delete_account(){
+    global $connection;
+
+    if (isset($_GET['delete'])){
+        $user_ID = $_GET['delete'];
+        $query = "DELETE FROM users WHERE user_ID = '$user_ID'";
+        $result = mysqli_query($connection, $query);
+        if ($result){
+            echo "<script type='text/javascript'>toastr.success('Account deleted successfully.')</script>";
+        }
+        else {
+            echo "<script type='text/javascript'>toastr.error('Account could not be deleted.')</script>";
         }
     }
 }
