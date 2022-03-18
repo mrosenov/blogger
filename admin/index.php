@@ -32,7 +32,11 @@
           </div>
         </div>
         <div class="card-body">
-          Check the Header part you can find Legacy vesion of style.
+            <?php
+            echo "Username:" . $_SESSION['username'];
+            echo "Role_ID:" . $_SESSION['user_role'];
+
+            ?>
           <br>
           Start creating your amazing application!
         </div>

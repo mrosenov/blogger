@@ -1,6 +1,4 @@
-<?php
-create_account();
-?>
+<?php create_account(); ?>
 <div class="card card-primary">
         <div class="card-header">
             <h3 class="card-title">Account Creating</h3>
@@ -41,8 +39,6 @@ create_account();
                         <option value="User">User</option>
                     </select>
                 </div>
-
-
             </div>
             <div class="card-footer">
                 <button name="create_account" type="submit" class="btn btn-primary">Create Account</button>

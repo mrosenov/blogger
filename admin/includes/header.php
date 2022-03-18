@@ -1,5 +1,13 @@
 <?php include "../includes/connection.php" ?>
 <?php include('functions.php'); ?>
+<?php
+session_start();
+
+if(empty($_SESSION['user_role']) || $_SESSION['user_role'] !== '1') {
+    header("Location: ../index.php");
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

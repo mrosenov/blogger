@@ -1,16 +1,45 @@
 <div class="card">
     <div class="card-body">
-        <div class="list-group">
-            <a href="#" class="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true">
-                <img src="https://github.com/twbs.png" alt="twbs" width="32" height="32" class="rounded-circle flex-shrink-0">
-                <div class="d-flex gap-2 w-100 justify-content-between">
-                    <div>
-                        <h6 class="mb-0">List group item heading</h6>
-                        <p class="mb-0 opacity-75">Some placeholder content in a paragraph.</p>
-                    </div>
-                    <small class="opacity-50 text-nowrap">now</small>
-                </div>
-            </a>
-        </div>
+        <?php
+            if (isset($_POST['login_account'])){
+                $username = mysqli_real_escape_string($connection, $_POST['username']);
+                $password = mysqli_real_escape_string($connection, $_POST['password']);
+                $query = "SELECT * FROM users WHERE username = '$username'";
+                $result = mysqli_query($connection, $query);
+
+                while ($row = mysqli_fetch_assoc($result)){
+                    $db_user_ID = $row['user_ID'];
+                    $db_username = $row['username'];
+                    $db_password = $row['password'];
+                    $db_firstname = $row['firstname'];
+                    $db_lastname = $row['lastname'];
+                    $db_email = $row['email'];
+                    $db_user_role = $row['user_role'];
+
+                    if ($username === $db_username && $password === $db_password) {
+                        echo "logged";
+                        echo $_SESSION['username'] = $db_username;
+                        echo $_SESSION['user_role'] = $db_user_role;
+                    }
+                }
+                if ($username = '' || empty($username)){
+                    echo "fill username";
+                }
+                elseif ($password = '' || empty($password)){
+                    echo "fill password";
+                }
+            }
+        ?>
+        <form action="" method="post">
+            <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                <input name="username" type="text" class="form-control" id="username" placeholder="Username">
+            </div>
+            <label for="password" class="form-label">Password</label>
+            <div class="input-group">
+                <input name="password" type="password" class="form-control" id="password" placeholder="Password">
+                <button name="login_account" class="btn btn-success" type="submit">Login</button>
+            </div>
+        </form>
     </div>
 </div>
