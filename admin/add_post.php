@@ -31,7 +31,7 @@ create_post();
                 </div>
                 <div class="form-group">
                     <label for="post_content">Content</label>
-                    <textarea name="post_content" type="text" class="form-control" id="post_content" placeholder="Content" style="min-height: 250px;"></textarea>
+                    <textarea name="post_content" type="text" class="form-control" id="summernote" placeholder="Content" style="min-height: 250px;"></textarea>
                 </div>
                 <div class="form-group">
                     <label for="post_tags">Tags</label>

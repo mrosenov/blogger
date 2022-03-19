@@ -20,6 +20,10 @@
 <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="plugins/toastr/toastr.min.js"></script>
 <script src="plugins/chart.js/Chart.min.js"></script>
+<script src="summernote/summernote.min.js"></script>
+<script src="js/scripts.js"></script>
+
+
 <!-- AdminLTE App -->
 
 </body>

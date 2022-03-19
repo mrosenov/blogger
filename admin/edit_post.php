@@ -55,7 +55,7 @@ edit_post();
             </div>
             <div class="form-group">
                 <label for="post_content">Content</label>
-                <textarea name="post_content" type="text" class="form-control" id="post_content" style="min-height: 250px;"><?php echo $post_content;?></textarea>
+                <textarea name="post_content" type="text" class="form-control" id="summernote" style="min-height: 250px;"><?php echo $post_content;?></textarea>
             </div>
             <div class="form-group">
                 <label for="post_tags">Tags</label>
