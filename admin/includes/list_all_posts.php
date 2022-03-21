@@ -4,26 +4,7 @@
     </div>
     <div class="card-body">
         <div id="example2_wrapper" class="dataTables_wrapper dt-bootstrap4">
-            <?php
-                if (isset($_POST['CheckBoxArray'])){
-                    foreach($_POST['CheckBoxArray'] as $CheckBoxValue){
-                        $bulk_options = $_POST['bulk_options'];
-                        switch ($bulk_options){
-                            case 'approved':
-                                $Publish = "UPDATE posts SET post_status = '$bulk_options' WHERE postID = '$CheckBoxValue'";
-                                $result = mysqli_query($connection,$Publish);
-                                break;
-                            case 'draft':
-                                $Draft = "UPDATE posts SET post_status = '$bulk_options' WHERE postID = '$CheckBoxValue'";
-                                $result = mysqli_query($connection,$Draft);
-                                break;
-                            case 'delete':
-                                $Delete = "DELETE FROM posts WHERE postID = '$CheckBoxValue'";
-                                $result = mysqli_query($connection,$Delete);
-                        }
-                    }
-                }
-            ?>
+            <?php Bulk_Option_Posts(); ?>
             <div class="row">
                 <form action="" method="post">
                 <div class="btn-group w-100">

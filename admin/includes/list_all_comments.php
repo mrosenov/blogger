@@ -4,7 +4,26 @@
     </div>
     <div class="card-body">
         <div id="example2_wrapper" class="dataTables_wrapper dt-bootstrap4">
+            <?php Bulk_Option_Comments(); ?>
             <div class="row">
+                <form action="" method="post">
+                    <div class="btn-group w-100">
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <select class="form-control" name="bulk_options">
+                                    <option value="">Select Options</option>
+                                    <option value="Approved">Publish</option>
+                                    <option value="Unapproved">Draft</option>
+                                    <option value="delete">Delete</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <input name="apply_bulk" type="submit" class="btn btn-success" value="Apply">
+                            </div>
+                        </div>
+                    </div>
                 <div class="col-sm-12">
                     <?php
                         delete_comment();
@@ -14,6 +33,7 @@
                     <table class="table table-bordered table-hover dataTable dtr-inline">
                         <thead>
                         <tr>
+                            <th class="sorting"><input type="checkbox" id="SelectAll"></th>
                             <th class="sorting">Comment ID</th>
                             <th class="sorting">Posted In</th>
                             <th class="sorting">Author</th>
@@ -45,6 +65,7 @@
 
                                 echo "
                                 <tr class='odd'>
+                                    <td><input type='checkbox' class='CheckBox' name='CheckBoxArray[]' value='$commentID'></td>
                                     <td>$commentID</td>
                                     <td><a href='../post.php?p_id=$postID'>$post_title</a></td>
                                     <td>$comment_author</td>
@@ -60,6 +81,7 @@
                         ?>
                         </tbody>
                     </table>
+                </form>
                 </div>
             </div>
         </div>

@@ -9,7 +9,7 @@ function list_posts(){
     if($count == 0){
         echo "
                                 <div class='alert alert-danger' role='alert'>
-                                  There are no categories
+                                  There are no posts
                                 </div>";
     }
     else{
@@ -436,6 +436,53 @@ function edit_account(){
         }
         else{
             echo "<script type='text/javascript'>toastr.error('Account could not be edited.')</script>";
+        }
+    }
+}
+
+function Bulk_Option_Posts(){
+    global $connection;
+
+    if (isset($_POST['CheckBoxArray'])){
+        foreach($_POST['CheckBoxArray'] as $CheckBoxValue){
+            $bulk_options = $_POST['bulk_options'];
+            switch ($bulk_options){
+                case 'approved':
+                    $Publish = "UPDATE posts SET post_status = '$bulk_options' WHERE postID = '$CheckBoxValue'";
+                    $result = mysqli_query($connection,$Publish);
+                    break;
+                case 'draft':
+                    $Draft = "UPDATE posts SET post_status = '$bulk_options' WHERE postID = '$CheckBoxValue'";
+                    $result = mysqli_query($connection,$Draft);
+                    break;
+                case 'delete':
+                    $Delete = "DELETE FROM posts WHERE postID = '$CheckBoxValue'";
+                    $result = mysqli_query($connection,$Delete);
+            }
+        }
+    }
+}
+
+function Bulk_Option_Comments(){
+    global $connection;
+
+    if (isset($_POST['CheckBoxArray'])){
+        foreach($_POST['CheckBoxArray'] as $CheckBoxValue){
+            $bulk_options = $_POST['bulk_options'];
+            switch ($bulk_options){
+                case 'Approved':
+                    $Approved = "UPDATE comments SET comment_status = '$bulk_options' WHERE comment_ID = '$CheckBoxValue'";
+                    $result = mysqli_query($connection,$Approved);
+                    break;
+                case 'Unapproved':
+                    $Draft = "UPDATE comments SET comment_status = '$bulk_options' WHERE comment_ID = '$CheckBoxValue'";
+                    $result = mysqli_query($connection,$Draft);
+                    break;
+                    break;
+                case 'delete':
+                    $Delete = "DELETE FROM comments WHERE comment_ID = '$CheckBoxValue'";
+                    $result = mysqli_query($connection,$Delete);
+            }
         }
     }
 }
