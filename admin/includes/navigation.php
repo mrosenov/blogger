@@ -14,19 +14,15 @@
         <li class="nav-item dropdown user-menu">
             <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
                 <img src="dist/img/user2-160x160.jpg" class="user-image img-circle elevation-2" alt="User Image">
-                <span class="d-none d-md-inline">Alexander Pierce</span>
+                <span class="d-none d-md-inline"><?php echo ("{$_SESSION["firstname"]} {$_SESSION['lastname']}"); ?></span>
             </a>
             <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                <!-- User image -->
                 <li class="user-header bg-primary">
                     <img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
-
                     <p>
-                        Alexander Pierce - Web Developer
-                        <small>Member since Nov. 2012</small>
+                        <?php echo ("{$_SESSION["firstname"]} {$_SESSION['lastname']}"); ?> - Web Developer
                     </p>
                 </li>
-                <!-- Menu Body -->
                 <li class="user-footer">
                     <a href="#" class="btn btn-default btn-flat">Profile</a>
                     <a href="../logout.php" class="btn btn-default btn-flat float-right">Sign out</a>

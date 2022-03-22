@@ -428,9 +428,15 @@ function edit_account(){
         $email = mysqli_real_escape_string($connection,$_POST['email']);
         $user_role = mysqli_real_escape_string($connection,$_POST['user_role']);
         $updated_at = date("Y-m-d h:i:sa");
+
+        $saltquery = "SELECT randSalt FROM users";
+        $randSalt = mysqli_query($connection,$saltquery);
+        $row = mysqli_fetch_assoc($randSalt);
+        $salt = $row['randSalt'];
+        $password = crypt($password,$salt);
+
         $query = "UPDATE users SET username = '$username',password = '$password',firstname = '$firstname',lastname = '$lastname',email = '$email',user_role='$user_role',updated_at = '$updated_at' WHERE user_ID = '$user_ID'";
         $result = mysqli_query($connection, $query);
-
         if ($result){
             echo "<script type='text/javascript'>toastr.success('Account edited successfully.')</script>";
         }
@@ -482,6 +488,52 @@ function Bulk_Option_Comments(){
                 case 'delete':
                     $Delete = "DELETE FROM comments WHERE comment_ID = '$CheckBoxValue'";
                     $result = mysqli_query($connection,$Delete);
+            }
+        }
+    }
+}
+
+function register_account(){
+    global $connection;
+
+    if (isset($_POST['create_account'])){
+        $username = mysqli_real_escape_string($connection,$_POST['username']);
+        $password = mysqli_real_escape_string($connection,$_POST['password']);
+        $firstname = mysqli_real_escape_string($connection,$_POST['firstname']);
+        $lastname = mysqli_real_escape_string($connection,$_POST['lastname']);
+        $email = mysqli_real_escape_string($connection,$_POST['email']);
+        $created_at = date("Y-m-d h:i:sa");
+        $updated_at = date("Y-m-d h:i:sa");
+
+        if ($username == "" || empty($username)){
+            echo "<script type='text/javascript'>toastr.error('Please add username')</script>";
+        }
+        elseif ($password == "" || empty($password)){
+            echo "<script type='text/javascript'>toastr.error('Please add password.')</script>";
+        }
+        elseif ($firstname == "" || empty($firstname)){
+            echo "<script type='text/javascript'>toastr.error('Please add firstname.')</script>";
+        }
+        elseif ($lastname == "" || empty($lastname)){
+            echo "<script type='text/javascript'>toastr.error('Please add lastname.')</script>";
+        }
+        elseif ($email == "" || empty($email)){
+            echo "<script type='text/javascript'>toastr.error('Please add email.')</script>";
+        }
+        else {
+            $saltquery = "SELECT randSalt FROM users";
+            $randSalt = mysqli_query($connection,$saltquery);
+            $row = mysqli_fetch_assoc($randSalt);
+            $salt = $row['randSalt'];
+            $password = crypt($password,$salt);
+
+            $query = "INSERT INTO users (username,password,firstname,lastname,email,user_role,created_at,updated_at) VALUES ('$username','$password','$firstname','$lastname','$email','2','$created_at','$updated_at')";
+            $result = mysqli_query($connection, $query);
+            if ($result){
+                echo "<script type='text/javascript'>toastr.success('Account created successfully.')</script>";
+            }
+            else {
+                echo "<script type='text/javascript'>toastr.error('Account could not be created.')</script>";
             }
         }
     }

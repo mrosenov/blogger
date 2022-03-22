@@ -18,7 +18,6 @@
                             <th class="sorting">Email</th>
                             <th class="sorting">Picture</th>
                             <th class="sorting">Role</th>
-                            <th class="sorting">RandSalt</th>
                             <th class="sorting">Created At</th>
                             <th class="sorting">Last Updated</th>
                             <th class="sorting">Actions</th>
@@ -52,7 +51,6 @@
                                     <td>$email</td>
                                     <td>$user_image</td>
                                     <td>$user_role</td>
-                                    <td>$randSalt</td>
                                     <td>$created_at</td>
                                     <td>$updated_at</td>
                                     <td><a href='users.php?delete=$user_ID' class='btn btn-danger'>Delete</a> <a href='users.php?source=edit_user&u_id=$user_ID' class='btn btn-warning'>Edit</a></td>

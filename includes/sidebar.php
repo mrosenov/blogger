@@ -16,12 +16,16 @@
                     $db_email = $row['email'];
                     $db_user_role = $row['user_role'];
 
+                    $password = crypt($password,$db_password);
                     if ($username === $db_username && $password === $db_password) {
                         echo "logged";
                         echo $_SESSION['username'] = $db_username;
                         echo $_SESSION['user_role'] = $db_user_role;
+                        echo $_SESSION['firstname'] = $db_firstname;
+                        echo $_SESSION['lastname'] = $db_lastname;
                     }
                 }
+
                 if ($username = '' || empty($username)){
                     echo "fill username";
                 }
