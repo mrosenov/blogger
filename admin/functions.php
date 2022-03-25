@@ -2,7 +2,20 @@
 
 function list_posts(){
     global $connection;
-    $query = "SELECT * FROM posts WHERE post_status = 'Approved'";
+    if (isset($_GET['page'])){
+        $GLOBALS['page'] = $_GET['page'];
+    }
+    else{
+        $GLOBALS['page'] = "";
+    }
+
+    if ($GLOBALS['page'] == "" || $GLOBALS['page'] == 1){
+        $page_1 = 0;
+    }
+    else{
+        $page_1 = ($GLOBALS['page'] * 5) - 5;
+    }
+    $query = "SELECT * FROM posts WHERE post_status = 'Approved' LIMIT $page_1,5";
     $result = mysqli_query($connection,$query);
 
     $count = mysqli_num_rows($result);
@@ -13,6 +26,7 @@ function list_posts(){
                                 </div>";
     }
     else{
+
         while ($row = mysqli_fetch_assoc($result)){
             $postID = $row['postID'];
             $post_title = $row['post_title'];
@@ -35,6 +49,23 @@ function list_posts(){
                                     Author: <a href='author_posts.php?au=$post_author'>$post_author</a>  | Published: $post_date | Comments: $post_comments_count | <a href='post.php?p_id=$postID' class='btn btn-sm btn-dark'>Read More</a>
                                 </div>
                             </div>";
+        }
+    }
+}
+
+function list_pages(){
+    global $connection;
+
+    $count_query = "SELECT * FROM posts";
+    $count_execute = mysqli_query($connection, $count_query);
+    $count2 = mysqli_num_rows($count_execute);
+    $count2 = ceil($count2 / 5);
+    for ($i = 1; $i <= $count2; $i++){
+        if ($i == $GLOBALS['page']){
+            echo "<li class='page-item active'><a class='page-link' href='index.php?page=$i'>$i</a></li>";
+        }
+        else {
+            echo "<li class='page-item'><a class='page-link' href='index.php?page=$i'>$i</a></li>";
         }
     }
 }

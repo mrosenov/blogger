@@ -8,6 +8,14 @@
             <div class="card">
                 <div class="card-body">
                     <?php list_posts(); ?>
+                    <nav aria-label='Page navigation example' style='margin-top: 10px;'>
+                        <ul class='pagination justify-content-center'>
+                            <?php
+                            list_pages();
+                            ?>
+                         </ul>
+                    </nav>
+
                 </div>
             </div>
         </div>
