@@ -32,7 +32,7 @@ function list_posts(){
                                     <p class='card-text'>$post_content</p>
                                 </div>
                                 <div class='card-footer text-muted'>
-                                    Author: $post_author | Published: $post_date | Comments: $post_comments_count | <a href='post.php?p_id=$postID' class='btn btn-sm btn-dark'>Read More</a>
+                                    Author: <a href='author_posts.php?au=$post_author'>$post_author</a>  | Published: $post_date | Comments: $post_comments_count | <a href='post.php?p_id=$postID' class='btn btn-sm btn-dark'>Read More</a>
                                 </div>
                             </div>";
         }
@@ -464,6 +464,30 @@ function Bulk_Option_Posts(){
                 case 'delete':
                     $Delete = "DELETE FROM posts WHERE postID = '$CheckBoxValue'";
                     $result = mysqli_query($connection,$Delete);
+                    break;
+                case 'clone':
+                    $Delete = "SELECT * FROM posts WHERE postID = '$CheckBoxValue'";
+                    $result = mysqli_query($connection,$Delete);
+                    while ($row = mysqli_fetch_assoc($result)){
+                        $categoryID = mysqli_real_escape_string($connection,$row['catID']);
+                        $post_title = mysqli_real_escape_string($connection,$row['post_title']);
+                        $post_author = mysqli_real_escape_string($connection,$row['post_author']);
+                        $post_content = mysqli_real_escape_string($connection,$row['post_content']);
+                        $post_tags = mysqli_real_escape_string($connection,$row['post_tags']);
+                        $comment_count = mysqli_real_escape_string($connection,$row['post_comments_count']);
+                        $post_status = mysqli_real_escape_string($connection,$row['post_status']);
+                        $post_date = mysqli_real_escape_string($connection,$row['post_date']);
+                        $created_at = date("Y-m-d h:i:sa");
+                        $updated_at = date("Y-m-d h:i:sa");
+
+                        $query = "INSERT INTO posts (catID,post_title,post_author,post_content,post_tags,post_comments_count,post_status,post_date,created_at,updated_at) VALUES ('$categoryID','$post_title','$post_author','$post_content','$post_tags','0','$post_status','$post_date','$created_at','$updated_at')";
+                        $duplicateEntry = mysqli_query($connection,$query);
+
+                        if (!$duplicateEntry){
+                            die("Nqma kak da stane . $post_title");
+                        }
+                    }
+                    break;
             }
         }
     }
@@ -488,6 +512,7 @@ function Bulk_Option_Comments(){
                 case 'delete':
                     $Delete = "DELETE FROM comments WHERE comment_ID = '$CheckBoxValue'";
                     $result = mysqli_query($connection,$Delete);
+                    break;
             }
         }
     }
