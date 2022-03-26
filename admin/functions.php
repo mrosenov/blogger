@@ -652,14 +652,4 @@ function login_user(){
         }
     }
 }
-
-function contact_us(){
-    global $connection;
-
-    if (isset($_POST['contact_us'])){
-        $to = "mrosenov.gm@gmail.com";
-        $subject = mysqli_real_escape_string($connection,$_POST['subject']);
-        $body = mysqli_real_escape_string($connection,$_POST['body']);
-    }
-}
 ?>
