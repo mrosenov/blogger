@@ -419,6 +419,7 @@ function create_account(){
             echo "<script type='text/javascript'>toastr.error('Please add role.')</script>";
         }
         else {
+            $password = password_hash($password, PASSWORD_DEFAULT, array('cost' => 10));
             $query = "INSERT INTO users (username,password,firstname,lastname,email,user_role,created_at,updated_at) VALUES ('$username','$password','$firstname','$lastname','$email','$user_role','$created_at','$updated_at')";
             $result = mysqli_query($connection, $query);
             if ($result){
@@ -459,13 +460,8 @@ function edit_account(){
         $email = mysqli_real_escape_string($connection,$_POST['email']);
         $user_role = mysqli_real_escape_string($connection,$_POST['user_role']);
         $updated_at = date("Y-m-d h:i:sa");
-
-        $saltquery = "SELECT randSalt FROM users";
-        $randSalt = mysqli_query($connection,$saltquery);
-        $row = mysqli_fetch_assoc($randSalt);
-        $salt = $row['randSalt'];
-        $password = crypt($password,$salt);
-
+        
+        $password = password_hash($password, PASSWORD_DEFAULT, array('cost' => 10));
         $query = "UPDATE users SET username = '$username',password = '$password',firstname = '$firstname',lastname = '$lastname',email = '$email',user_role='$user_role',updated_at = '$updated_at' WHERE user_ID = '$user_ID'";
         $result = mysqli_query($connection, $query);
         if ($result){
@@ -577,12 +573,7 @@ function register_account(){
             echo "<script type='text/javascript'>toastr.error('Please add email.')</script>";
         }
         else {
-            $saltquery = "SELECT randSalt FROM users";
-            $randSalt = mysqli_query($connection,$saltquery);
-            $row = mysqli_fetch_assoc($randSalt);
-            $salt = $row['randSalt'];
-            $password = crypt($password,$salt);
-
+            $password = password_hash($password, PASSWORD_DEFAULT, array('cost' => 12));
             $query = "INSERT INTO users (username,password,firstname,lastname,email,user_role,created_at,updated_at) VALUES ('$username','$password','$firstname','$lastname','$email','2','$created_at','$updated_at')";
             $result = mysqli_query($connection, $query);
             if ($result){
@@ -614,5 +605,40 @@ function list_online_users(){
     }
     $users_online = mysqli_query($connection, "SELECT * FROM users_online WHERE time > '$time_out'");
     $GLOBALS['online'] = mysqli_num_rows($users_online);
+}
+
+function login_user(){
+    global $connection;
+
+    if (isset($_POST['login_account'])){
+        $username = mysqli_real_escape_string($connection, $_POST['username']);
+        $password = mysqli_real_escape_string($connection, $_POST['password']);
+        $query = "SELECT * FROM users WHERE username = '$username'";
+        $result = mysqli_query($connection, $query);
+
+        while ($row = mysqli_fetch_assoc($result)){
+            $db_user_ID = $row['user_ID'];
+            $db_username = $row['username'];
+            $db_password = $row['password'];
+            $db_firstname = $row['firstname'];
+            $db_lastname = $row['lastname'];
+            $db_email = $row['email'];
+            $db_user_role = $row['user_role'];
+
+            if (password_verify($password,$db_password)) {
+                echo "logged";
+                echo $_SESSION['username'] = $db_username;
+                echo $_SESSION['user_role'] = $db_user_role;
+                echo $_SESSION['firstname'] = $db_firstname;
+                echo $_SESSION['lastname'] = $db_lastname;
+            }
+        }
+        if ($username = '' || empty($username)){
+            echo "fill username";
+        }
+        elseif ($password = '' || empty($password)){
+            echo "fill password";
+        }
+    }
 }
 ?>
