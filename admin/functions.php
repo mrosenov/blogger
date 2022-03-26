@@ -21,9 +21,9 @@ function list_posts(){
     $count = mysqli_num_rows($result);
     if($count == 0){
         echo "
-                                <div class='alert alert-danger' role='alert'>
-                                  There are no posts
-                                </div>";
+            <div class='alert alert-danger' role='alert'>
+              There are no posts
+            </div>";
     }
     else{
 
@@ -33,10 +33,10 @@ function list_posts(){
             $post_author = $row['post_author'];
             $post_content = substr($row['post_content'],0,400);
             $post_tags = $row['post_tags'];
-            $post_comments_count = $row['post_comments_count'];
             $post_status = $row['post_status'];
             $post_date = $row['created_at'];
-
+            $count_comments_query = mysqli_query($connection,"SELECT * FROM comments where post_ID = '$postID' AND comment_status = 'Approved'");
+            $count_comments = mysqli_num_rows($count_comments_query);
             echo "
                             <div class='card' style='margin-top: 5px;'>
                                 <div class='card-header'>
@@ -46,7 +46,7 @@ function list_posts(){
                                     <p class='card-text'>$post_content</p>
                                 </div>
                                 <div class='card-footer text-muted'>
-                                    Author: <a href='author_posts.php?au=$post_author'>$post_author</a>  | Published: $post_date | Comments: $post_comments_count | <a href='post.php?p_id=$postID' class='btn btn-sm btn-dark'>Read More</a>
+                                    Author: <a href='author_posts.php?au=$post_author'>$post_author</a>  | Published: $post_date | Comments: $count_comments | <a href='post.php?p_id=$postID' class='btn btn-sm btn-dark'>Read More</a>
                                 </div>
                             </div>";
         }
@@ -169,16 +169,22 @@ function edit_post(){
 
 function delete_post() {
     global $connection;
-    if (isset($_GET['delete'])){
-        $postID = $_GET['delete'];
-        $query = "DELETE FROM posts WHERE postID = $postID";
-        $result = mysqli_query($connection, $query);
-        if ($result){
-            echo "<script type='text/javascript'>toastr.success('Post deleted successfully.')</script>";
+
+    if (isset($_SESSION['user_role']) == '1'){
+        if (isset($_GET['delete'])){
+            $postID = $_GET['delete'];
+            $query = "DELETE FROM posts WHERE postID = $postID";
+            $result = mysqli_query($connection, $query);
+            if ($result){
+                echo "<script type='text/javascript'>toastr.success('Post deleted successfully.')</script>";
+            }
+            else {
+                echo"<script type='text/javascript'>toastr.error('Could not delete the post.')</script>";
+            }
         }
-        else {
-            echo"<script type='text/javascript'>toastr.error('Could not delete the post.')</script>";
-        }
+    }
+    else{
+        echo "No rights to do it";
     }
 }
 
@@ -249,16 +255,22 @@ function edit_category() {
 
 function delete_category() {
     global $connection;
-    if (isset($_GET['delete'])){
-        $catID = $_GET['delete'];
-        $query = "DELETE FROM categories WHERE catID = $catID";
-        $result = mysqli_query($connection,$query);
-        if ($result){
-            echo "<script type='text/javascript'>toastr.success('Category deleted successfully.')</script>";
+
+    if (isset($_SESSION['user_role']) == '1'){
+        if (isset($_GET['delete'])){
+            $catID = $_GET['delete'];
+            $query = "DELETE FROM categories WHERE catID = $catID";
+            $result = mysqli_query($connection,$query);
+            if ($result){
+                echo "<script type='text/javascript'>toastr.success('Category deleted successfully.')</script>";
+            }
+            else {
+                echo"<script type='text/javascript'>toastr.error('Couldnt delete the category.')</script>";
+            }
         }
-        else {
-            echo"<script type='text/javascript'>toastr.error('Couldnt delete the category.')</script>";
-        }
+    }
+    else{
+        echo "No rights to do it";
     }
 }
 
@@ -322,68 +334,61 @@ function create_comment(){
 function delete_comment(){
     global $connection;
 
-    if (isset($_GET['delete'])){
-        $commentID = $_GET['delete'];
-        $query = "DELETE FROM comments WHERE comment_ID = '$commentID'";
-        $result = mysqli_query($connection,$query);
-        if ($result){
-            echo "<script type='text/javascript'>toastr.success('Comment deleted successfully.')</script>";
+    if (isset($_SESSION['user_role']) == '1'){
+        if (isset($_GET['delete'])){
+            $commentID = $_GET['delete'];
+            $query = "DELETE FROM comments WHERE comment_ID = '$commentID'";
+            $result = mysqli_query($connection,$query);
+            if ($result){
+                echo "<script type='text/javascript'>toastr.success('Comment deleted successfully.')</script>";
+            }
+            else{
+                echo "<script type='text/javascript'>toastr.error('Could not delete the comment.')</script>";
+            }
         }
-        else{
-            echo "<script type='text/javascript'>toastr.error('Could not delete the comment.')</script>";
-        }
+    }
+    else{
+        echo "No rights to do it";
     }
 }
 
 function unapprove_comment(){
     global $connection;
 
-    if (isset($_GET['unapprove'])){
-        if (isset($_GET['p_id'])){
-            $commentID = $_GET['unapprove'];
-            $PostID = $_GET['p_id'];
-            $CheckStatus = "SELECT * FROM comments WHERE comment_ID = '$commentID'";
-            $CheckResult = mysqli_query($connection,$CheckStatus);
-            while ($row = mysqli_fetch_assoc($CheckResult)){
-                $comment_status = $row['comment_status'];
-                if ($comment_status == 'Unapproved'){
-                    echo "<script type='text/javascript'>toastr.error('The comment is already unapproved.')</script>";
-                }
-                elseif($comment_status == 'Approved'){
-                    $count_query = "UPDATE posts SET post_comments_count = post_comments_count - 1 WHERE postID = '$PostID'";
-                    $update_count = mysqli_query($connection, $count_query);
+    if (isset($_SESSION['user_role']) == '1'){
+        if (isset($_GET['unapprove'])){
+            if (isset($_GET['p_id'])){
+                $commentID = $_GET['unapprove'];
+                $query = "UPDATE comments SET comment_status = 'Unapproved' WHERE comment_ID = '$commentID'";
+                $result = mysqli_query($connection, $query);
+                if ($result){
                     echo "<script type='text/javascript'>toastr.success('Comment unapproved successfully.')</script>";
                 }
             }
         }
-        $query = "UPDATE comments SET comment_status = 'Unapproved' WHERE comment_ID = '$commentID'";
-        $result = mysqli_query($connection, $query);
+    }
+    else{
+        echo "No rights to do it";
     }
 }
 
 function approve_comment(){
     global $connection;
 
-    if (isset($_GET['approve'])){
-        if (isset($_GET['p_id'])){
-            $commentID = $_GET['approve'];
-            $CheckStatus = "SELECT * FROM comments WHERE comment_ID = '$commentID'";
-            $CheckResult = mysqli_query($connection,$CheckStatus);
-            while ($row = mysqli_fetch_assoc($CheckResult)){
-                $comment_status = $row['comment_status'];
-                if ($comment_status == 'Approved'){
-                    echo "<script type='text/javascript'>toastr.error('The comment is already approved.')</script>";
-                }
-                elseif($comment_status == 'Unapproved'){
-                    $PostID = $_GET['p_id'];
-                    $count_query = "UPDATE posts SET post_comments_count = post_comments_count + 1 WHERE postID = '$PostID'";
-                    $update_count = mysqli_query($connection, $count_query);
+    if (isset($_SESSION['user_role']) == '1'){
+        if (isset($_GET['approve'])){
+            if (isset($_GET['p_id'])){
+                $commentID = $_GET['approve'];
+                $query = "UPDATE comments SET comment_status = 'Approved' WHERE comment_ID = '$commentID';";
+                $result = mysqli_query($connection, $query);
+                if ($result){
                     echo "<script type='text/javascript'>toastr.success('Comment approved successfully.')</script>";
                 }
             }
-            $query = "UPDATE comments SET comment_status = 'Approved' WHERE comment_ID = '$commentID';";
-            $result = mysqli_query($connection, $query);
         }
+    }
+    else{
+        echo "No rights to do it";
     }
 }
 
@@ -435,17 +440,23 @@ function create_account(){
 function delete_account(){
     global $connection;
 
-    if (isset($_GET['delete'])){
-        $user_ID = $_GET['delete'];
-        $query = "DELETE FROM users WHERE user_ID = '$user_ID'";
-        $result = mysqli_query($connection, $query);
-        if ($result){
-            echo "<script type='text/javascript'>toastr.success('Account deleted successfully.')</script>";
-        }
-        else {
-            echo "<script type='text/javascript'>toastr.error('Account could not be deleted.')</script>";
+    if (isset($_SESSION['user_role']) == '1'){
+        if (isset($_GET['delete'])){
+            $user_ID = $_GET['delete'];
+            $query = "DELETE FROM users WHERE user_ID = '$user_ID'";
+            $result = mysqli_query($connection, $query);
+            if ($result){
+                echo "<script type='text/javascript'>toastr.success('Account deleted successfully.')</script>";
+            }
+            else {
+                echo "<script type='text/javascript'>toastr.error('Account could not be deleted.')</script>";
+            }
         }
     }
+    else{
+        echo "No rights to do it";
+    }
+
 }
 
 function edit_account(){
@@ -460,7 +471,7 @@ function edit_account(){
         $email = mysqli_real_escape_string($connection,$_POST['email']);
         $user_role = mysqli_real_escape_string($connection,$_POST['user_role']);
         $updated_at = date("Y-m-d h:i:sa");
-        
+
         $password = password_hash($password, PASSWORD_DEFAULT, array('cost' => 10));
         $query = "UPDATE users SET username = '$username',password = '$password',firstname = '$firstname',lastname = '$lastname',email = '$email',user_role='$user_role',updated_at = '$updated_at' WHERE user_ID = '$user_ID'";
         $result = mysqli_query($connection, $query);

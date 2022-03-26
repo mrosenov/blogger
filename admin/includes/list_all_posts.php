@@ -55,11 +55,13 @@
                                 $post_title = $row['post_title'];
                                 $post_author = $row['post_author'];
                                 $post_tags = $row['post_tags'];
-                                $post_comments = $row['post_comments_count'];
                                 $post_status = $row['post_status'];
                                 $post_date = $row['post_date'];
                                 $created_at = $row['created_at'];
                                 $updated_at = $row['updated_at'];
+
+                                $count_comments_query = mysqli_query($connection,"SELECT * FROM comments where post_ID = '$postID' AND comment_status = 'Approved'");
+                                $count_comments = mysqli_num_rows($count_comments_query);
 
                                 echo "
                                 <tr class='odd'>
@@ -69,7 +71,7 @@
                                     <td>$post_title</td>
                                     <td>$post_author</td>
                                     <td>$post_tags</td>
-                                    <td>$post_comments</td>
+                                    <td>$count_comments</td>
                                     <td>$post_status</td>
                                     <td>$post_date</td>
                                     <td>$created_at</td>
