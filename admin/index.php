@@ -2,6 +2,7 @@
 <div class="wrapper">
     <?php include('includes/navigation.php'); ?>
     <?php include('includes/sidebar.php'); ?>
+    <?php list_online_users(); ?>
   <div class="content-wrapper">
     <section class="content-header">
       <div class="container-fluid">
@@ -75,6 +76,20 @@
                     </div>
                     <div class="icon">
                         <i class="fa-solid fa-list"></i>
+                    </div>
+                    <a href="categories.php" class="small-box-footer">
+                        More info <i class="fas fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-6">
+                <div class="small-box bg-danger">
+                    <div class="inner">
+                        <h3><?php echo $GLOBALS['online']; ?></h3>
+                        <p>Online</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa-regular fa-arrows-retweet"></i>
                     </div>
                     <a href="categories.php" class="small-box-footer">
                         More info <i class="fas fa-arrow-circle-right"></i>

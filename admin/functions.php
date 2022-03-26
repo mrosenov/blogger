@@ -594,4 +594,25 @@ function register_account(){
         }
     }
 }
+function list_online_users(){
+    global $connection;
+
+    $session = session_id();
+    $time = time();
+    $time_seconds = 60;
+    $time_out = $time - $time_seconds;
+
+    $query = "SELECT * FROM users_online WHERE session = '$session'";
+    $ext_query = mysqli_query($connection, $query);
+    $count = mysqli_num_rows($ext_query);
+
+    if ($count == NULL) {
+        mysqli_query($connection, "INSERT INTO users_online(session,time) VALUES ('$session','$time')");
+    }
+    else{
+        mysqli_query($connection, "UPDATE users_online SET time = '$time' WHERE session = '$session'");
+    }
+    $users_online = mysqli_query($connection, "SELECT * FROM users_online WHERE time > '$time_out'");
+    $GLOBALS['online'] = mysqli_num_rows($users_online);
+}
 ?>
