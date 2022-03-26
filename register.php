@@ -37,7 +37,7 @@
 
                             </div>
                             <div class="card-footer">
-                                <button name="create_account" type="submit" class="btn btn-primary">Submit</button>
+                                <button name="create_account" type="submit" class="btn btn-primary">Register</button>
                             </div>
                         </form>
                     </div>
