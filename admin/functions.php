@@ -32,8 +32,6 @@ function list_posts(){
             $post_title = $row['post_title'];
             $post_author = $row['post_author'];
             $post_content = substr($row['post_content'],0,400);
-            $post_tags = $row['post_tags'];
-            $post_status = $row['post_status'];
             $post_date = $row['created_at'];
             $count_comments_query = mysqli_query($connection,"SELECT * FROM comments where post_ID = '$postID' AND comment_status = 'Approved'");
             $count_comments = mysqli_num_rows($count_comments_query);
@@ -56,16 +54,21 @@ function list_posts(){
 function list_pages(){
     global $connection;
 
-    $count_query = "SELECT * FROM posts";
+    $count_query = "SELECT * FROM posts WHERE post_status = 'Approved'";
     $count_execute = mysqli_query($connection, $count_query);
     $count2 = mysqli_num_rows($count_execute);
-    $count2 = ceil($count2 / 5);
-    for ($i = 1; $i <= $count2; $i++){
-        if ($i == $GLOBALS['page']){
-            echo "<li class='page-item active'><a class='page-link' href='index.php?page=$i'>$i</a></li>";
-        }
-        else {
-            echo "<li class='page-item'><a class='page-link' href='index.php?page=$i'>$i</a></li>";
+    if ($count2 <= 0){
+        echo "";
+    }
+    else{
+        $count2 = ceil($count2 / 5);
+        for ($i = 1; $i <= $count2; $i++){
+            if ($i == $GLOBALS['page']){
+                echo "<li class='page-item active'><a class='page-link' href='index.php?page=$i'>$i</a></li>";
+            }
+            else {
+                echo "<li class='page-item'><a class='page-link' href='index.php?page=$i'>$i</a></li>";
+            }
         }
     }
 }
@@ -265,7 +268,7 @@ function delete_category() {
                 echo "<script type='text/javascript'>toastr.success('Category deleted successfully.')</script>";
             }
             else {
-                echo"<script type='text/javascript'>toastr.error('Couldnt delete the category.')</script>";
+                echo"<script type='text/javascript'>toastr.error('Could not delete the category.')</script>";
             }
         }
     }
@@ -520,10 +523,6 @@ function Bulk_Option_Posts(){
 
                         $query = "INSERT INTO posts (catID,post_title,post_author,post_content,post_tags,post_comments_count,post_status,post_date,created_at,updated_at) VALUES ('$categoryID','$post_title','$post_author','$post_content','$post_tags','0','$post_status','$post_date','$created_at','$updated_at')";
                         $duplicateEntry = mysqli_query($connection,$query);
-
-                        if (!$duplicateEntry){
-                            die("Nqma kak da stane . $post_title");
-                        }
                     }
                     break;
             }
@@ -546,7 +545,6 @@ function Bulk_Option_Comments(){
                     $Draft = "UPDATE comments SET comment_status = '$bulk_options' WHERE comment_ID = '$CheckBoxValue'";
                     $result = mysqli_query($connection,$Draft);
                     break;
-                    break;
                 case 'delete':
                     $Delete = "DELETE FROM comments WHERE comment_ID = '$CheckBoxValue'";
                     $result = mysqli_query($connection,$Delete);
@@ -568,30 +566,38 @@ function register_account(){
         $created_at = date("Y-m-d h:i:sa");
         $updated_at = date("Y-m-d h:i:sa");
 
-        if ($username == "" || empty($username)){
-            echo "<script type='text/javascript'>toastr.error('Please add username')</script>";
+        if (username_exists($username)){
+            echo "<script type='text/javascript'>toastr.error('Username already exists.')</script>";
         }
-        elseif ($password == "" || empty($password)){
-            echo "<script type='text/javascript'>toastr.error('Please add password.')</script>";
+        elseif (email_exists($email)){
+            echo "<script type='text/javascript'>toastr.error('Email already exists.')</script>";
         }
-        elseif ($firstname == "" || empty($firstname)){
-            echo "<script type='text/javascript'>toastr.error('Please add firstname.')</script>";
-        }
-        elseif ($lastname == "" || empty($lastname)){
-            echo "<script type='text/javascript'>toastr.error('Please add lastname.')</script>";
-        }
-        elseif ($email == "" || empty($email)){
-            echo "<script type='text/javascript'>toastr.error('Please add email.')</script>";
-        }
-        else {
-            $password = password_hash($password, PASSWORD_DEFAULT, array('cost' => 12));
-            $query = "INSERT INTO users (username,password,firstname,lastname,email,user_role,created_at,updated_at) VALUES ('$username','$password','$firstname','$lastname','$email','2','$created_at','$updated_at')";
-            $result = mysqli_query($connection, $query);
-            if ($result){
-                echo "<script type='text/javascript'>toastr.success('Account created successfully.')</script>";
+        else{
+            if ($username == "" || empty($username)){
+                echo "<script type='text/javascript'>toastr.error('Please add username')</script>";
+            }
+            elseif ($password == "" || empty($password)){
+                echo "<script type='text/javascript'>toastr.error('Please add password.')</script>";
+            }
+            elseif ($firstname == "" || empty($firstname)){
+                echo "<script type='text/javascript'>toastr.error('Please add firstname.')</script>";
+            }
+            elseif ($lastname == "" || empty($lastname)){
+                echo "<script type='text/javascript'>toastr.error('Please add lastname.')</script>";
+            }
+            elseif ($email == "" || empty($email)){
+                echo "<script type='text/javascript'>toastr.error('Please add email.')</script>";
             }
             else {
-                echo "<script type='text/javascript'>toastr.error('Account could not be created.')</script>";
+                $password = password_hash($password, PASSWORD_DEFAULT, array('cost' => 12));
+                $query = "INSERT INTO users (username,password,firstname,lastname,email,user_role,created_at,updated_at) VALUES ('$username','$password','$firstname','$lastname','$email','2','$created_at','$updated_at')";
+                $result = mysqli_query($connection, $query);
+                if ($result){
+                    echo "<script type='text/javascript'>toastr.success('Account created successfully.')</script>";
+                }
+                else {
+                    echo "<script type='text/javascript'>toastr.error('Account could not be created.')</script>";
+                }
             }
         }
     }
@@ -637,11 +643,10 @@ function login_user(){
             $db_user_role = $row['user_role'];
 
             if (password_verify($password,$db_password)) {
-                echo "logged";
-                echo $_SESSION['username'] = $db_username;
-                echo $_SESSION['user_role'] = $db_user_role;
-                echo $_SESSION['firstname'] = $db_firstname;
-                echo $_SESSION['lastname'] = $db_lastname;
+                $_SESSION['username'] = $db_username;
+                $_SESSION['user_role'] = $db_user_role;
+                $_SESSION['firstname'] = $db_firstname;
+                $_SESSION['lastname'] = $db_lastname;
             }
         }
         if ($username = '' || empty($username)){
@@ -650,6 +655,34 @@ function login_user(){
         elseif ($password = '' || empty($password)){
             echo "fill password";
         }
+    }
+}
+
+function username_exists($username){
+    global $connection;
+
+    $query = "SELECT username FROM users WHERE username = '$username'";
+    $result = mysqli_query($connection, $query);
+
+    if (mysqli_num_rows($result) > 0){
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+
+function email_exists($email){
+    global $connection;
+
+    $query = "SELECT email FROM users WHERE email = '$email'";
+    $result = mysqli_query($connection, $query);
+
+    if (mysqli_num_rows($result) > 0){
+        return true;
+    }
+    else{
+        return false;
     }
 }
 ?>
