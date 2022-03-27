@@ -16,6 +16,6 @@
     </div>
 </footer>
 </div>
-<script src="js/bootstrap.bundle.js"></script>
+<script src="/blog/js/bootstrap.bundle.js"></script>
 </body>
 </html>

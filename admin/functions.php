@@ -38,7 +38,7 @@ function list_posts(){
             echo "
                             <div class='card' style='margin-top: 5px;'>
                                 <div class='card-header'>
-                                    <a href='post.php?p_id=$postID'>$post_title</a>
+                                    <a href='post/$postID'>$post_title</a>
                                 </div>
                                 <div class='card-body'>
                                     <p class='card-text'>$post_content</p>

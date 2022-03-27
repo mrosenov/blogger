@@ -7,13 +7,13 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="index.php">Home</a>
+                    <a class="nav-link active" aria-current="page" href="/blog/index">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="register.php">Register</a>
+                    <a class="nav-link" href="/blog/register">Register</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="contacts.php">Contact Us</a>
+                    <a class="nav-link" href="/blog/contacts">Contact Us</a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -27,7 +27,7 @@
                             while ($row = mysqli_fetch_assoc($result)){
                                 $CategoryID = $row['catID'];
                                 $cat_title = $row['catTitle'];
-                                echo "<li><a class='dropdown-item' href='category.php?cat=$CategoryID'>$cat_title</a></li>";
+                                echo "<li><a class='dropdown-item' href='/blog/category/$CategoryID'>$cat_title</a></li>";
                             }
 
                         ?>
@@ -37,7 +37,7 @@
                     <a class="nav-link disabled">Disabled</a>
                 </li>
             </ul>
-            <form action="search.php" method="POST" class="d-flex">
+            <form action="/blog/search.php" method="POST" class="d-flex">
                 <input name="searchstr" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                 <button name="search" class="btn btn-outline-success" type="submit">Search</button>
             </form>
