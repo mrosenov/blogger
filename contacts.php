@@ -19,15 +19,15 @@ use PHPMailer\PHPMailer\Exception;
             //Server settings
             $mail->SMTPDebug = 0;                                 // Enable verbose debug output
             $mail->isSMTP();                                      // Set mailer to use SMTP
-            $mail->Host = 'smtp-relay.sendinblue.com';                  // Specify main and backup SMTP servers
+            $mail->Host = 'smtp.host.com';                  // Specify main and backup SMTP servers
             $mail->SMTPAuth = true;                               // Enable SMTP authentication
-            $mail->Username = 'mitkorosenov@live.com';             // SMTP username
-            $mail->Password = 'Sfz8kgqh4LFOT1bZ';                           // SMTP password
+            $mail->Username = 'Email';             // SMTP username
+            $mail->Password = 'Secret';                           // SMTP password
             $mail->SMTPSecure = 'ssl';                            // Enable SSL encryption, TLS also accepted with port 465
             $mail->Port = 465;                                    // TCP port to connect to
 
             //Recipients
-            $mail->setFrom('mitkorosenov@live.com', 'Mailer');          //This is the email your form sends From
+            $mail->setFrom('EmailSentFrom', 'Mailer');          //This is the email your form sends From
             $mail->addAddress($EmailTo, $NameTo); // Add a recipient address
 
             //Content
