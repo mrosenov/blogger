@@ -14,15 +14,17 @@
                     <input name='password' type='password' class='form-control' id='password' placeholder='Password'>
                     <button name='login_account' class='btn btn-success' type='submit'>Login</button>
                 </div>
-            </form>";
+            </form>
+            <a href='/blog/recovery-password?token=$uniqID' class='text-decoration-none'>Password Recovery</a>";
             }
             else{
                 echo "Logged as: " . $_SESSION['username'];
                 echo "
                 <div class='mb-3'>
-                    <a href='logout.php' class='btn btn-info'>Log out</a>
+                    <a href='/blog/logout' class='btn btn-info'>Log out</a>
                 </div>";
             }
+
         ?>
     </div>
 </div>

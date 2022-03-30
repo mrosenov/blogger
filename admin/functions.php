@@ -1,5 +1,12 @@
 <?php
 
+$uniqID = uniqid(true);
+
+function redirect($location){
+    header("Location:" . $location);
+    exit;
+}
+
 function list_posts(){
     global $connection;
     if (isset($_GET['page'])){
@@ -44,7 +51,7 @@ function list_posts(){
                                     <p class='card-text'>$post_content</p>
                                 </div>
                                 <div class='card-footer text-muted'>
-                                    Author: <a href='author_posts.php?au=$post_author'>$post_author</a>  | Published: $post_date | Comments: $count_comments | <a href='post.php?p_id=$postID' class='btn btn-sm btn-dark'>Read More</a>
+                                    Author: <a href='author_posts/$post_author'>$post_author</a>  | Published: $post_date | Comments: $count_comments | <a href='post.php?p_id=$postID' class='btn btn-sm btn-dark'>Read More</a>
                                 </div>
                             </div>";
         }
@@ -682,7 +689,127 @@ function email_exists($email){
         return true;
     }
     else{
+        echo "Nqma takav mail";
         return false;
     }
 }
+
+function ifItIsMethod($method=null){
+    if ($_SERVER['REQUEST_METHOD'] == strtoupper($method)){
+        return true;
+    }
+    return false;
+}
+
+function isLoggedIn(){
+    if (isset($_SESSION['user_role'])){
+        return true;
+    }
+    return false;
+}
+
+function checkIfUserIsLoggedInAndRedirect($redirectLocation=null){
+    if (isLoggedIn()){
+        redirect($redirectLocation);
+    }
+}
+
+function request_password(){
+    global $connection;
+
+    if (ifItIsMethod('post')){
+        if (isset($_POST['request_password'])){
+            $email = $_POST['email'];
+            $length = 50;
+            $token = bin2hex(openssl_random_pseudo_bytes($length));
+
+            if (email_exists($email)){
+                $stmt = mysqli_prepare($connection,"UPDATE users SET token='$token' WHERE email=?");
+                mysqli_stmt_bind_param($stmt, "s", $email);
+                mysqli_stmt_execute($stmt);
+                mysqli_stmt_close($stmt);
+
+                $mail = new \PHPMailer\PHPMailer\PHPMailer();
+                $mail->isSMTP();
+                $mail->Host = Config::SMTP_HOST;
+                $mail->SMTPAuth = true;
+                $mail->Port = Config::SMTP_PORT;
+                $mail->Username = Config::SMTP_USER;
+                $mail->Password = Config::SMTP_PASSWORD;
+                $mail->isHTML(true);
+                $mail->CharSet = 'UTF-8';
+
+                $mail->setFrom('mitkorosenov@live.com','Mitko Rosenov');
+                $mail->addAddress($email);
+
+                $mail->Subject = 'test email';
+                $mail->Body = '<p>Click the following link in order to reset your password - <a href="http://localhost/blog/reset.php?email='.$email.'&token='.$token.'">reset password</a></p>';
+
+                if ($mail->send()){
+                    echo "<script type='text/javascript'>toastr.success('Check your email for instructions.')</script>";
+                }
+                else{
+                    echo "<script type='text/javascript'>toastr.error('Something went wrong and we could not send you email.')</script>";
+                }
+            }
+        }
+    }
+}
+
+function password_reset(){
+    global $connection;
+
+    if ($stmt = mysqli_prepare($connection, 'SELECT username,email,token FROM users WHERE token=?')){
+        mysqli_stmt_bind_param($stmt, "s", $_GET['token']);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_bind_result($stmt, $username, $email, $token);
+        mysqli_stmt_fetch($stmt);
+        mysqli_stmt_close($stmt);
+
+        if (isset($_POST['password']) && isset($_POST['confirm_password'])){
+            if ($_POST['password'] === $_POST['confirm_password']){
+                $password = $_POST['password'];
+                $hashed_password = password_hash($password,PASSWORD_DEFAULT, array('cost'=>12));
+                if ($stmt = mysqli_prepare($connection,"UPDATE users SET token='', password='$hashed_password' WHERE email = ?")){
+                    mysqli_stmt_bind_param($stmt, "s", $_GET['email']);
+                    mysqli_stmt_execute($stmt);
+
+                    if (mysqli_stmt_affected_rows($stmt) >= 1){
+                        echo "<script type='text/javascript'>toastr.success('Password has been changed.')</script>";
+                    }
+                }
+            }
+            else{
+                echo "<script type='text/javascript'>toastr.error('Please make sure both passwords are same.')</script>";
+            }
+        }
+    }
+}
+
+function loggedInUserID() {
+    global $connection;
+
+    if (isLoggedIn()){
+        $result = mysqli_query($connection, "SELECT * FROM users WHERE username ='".$_SESSION['username']."'");
+        $user = mysqli_fetch_array($result);
+        return mysqli_num_rows($result) >= 1 ? $user['user_ID'] : false;
+    }
+    return false;
+}
+
+function PostLike($post_id = ''){
+    global $connection;
+
+    $result = mysqli_query($connection,"SELECT * FROM post_likes WHERE user_id=" .loggedInUserID() . " AND Post_ID='$post_id'");
+    return mysqli_num_rows($result) >= 1 ? true : false;
+}
+
+function GetPostLikes($PostID){
+    global $connection;
+
+    $query = "SELECT * FROM post_likes WHERE Post_ID = '$PostID'";
+    $result = mysqli_query($connection,$query);
+    return mysqli_num_rows($result);
+}
+
 ?>

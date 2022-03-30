@@ -1,6 +1,21 @@
 <?php include ("includes/connection.php"); ?>
 <?php include ("includes/header.php"); ?>
 <?php include ("includes/navigation.php"); ?>
+<?php
+if (isset($_POST['liked'])){
+    $User_ID = $_POST['user_id'];
+    $PostID = $_POST['post_id'];
+
+    mysqli_query($connection, "INSERT INTO post_likes(User_ID,Post_ID) VALUES ('$User_ID','$PostID')");
+}
+
+if (isset($_POST['unliked'])){
+    $User_ID = $_POST['user_id'];
+    $PostID = $_POST['post_id'];
+
+    mysqli_query($connection, "DELETE FROM post_likes WHERE User_ID = '$User_ID' AND Post_ID = '$PostID'");
+}
+?>
 
 <div class="container">
     <div class="row" style="margin-top: 5px;">
@@ -34,7 +49,12 @@
                             <p class='card-text'><?php echo $post_content; ?></p>
                         </div>
                         <div class='card-footer text-muted'>
-                            Author: <?php echo $post_author; ?> | Published: <?php echo $post_date; ?>
+                            Author: <?php echo $post_author; ?> | Published: <?php echo $post_date; ?> | Likes: <?php echo GetPostLikes($PostID);?>
+
+                            <?php if (isLoggedIn()):?>
+                            <a href="" class="<?php echo PostLike($PostID) ? 'unlike' : 'like'; ?> btn btn-sm btn-dark"> <?php echo PostLike($PostID) ? '<i class="fa-solid fa-heart"></i> Unlike' : '<i class="fa-thin fa-heart"></i> Like'; ?></a>
+                            <?php else: ?>
+                            <?php endif; ?>
                         </div>
                     </div>
                     <?php create_comment(); ?>
@@ -113,3 +133,35 @@
         </div>
     </div>
 <?php include ("includes/footer.php"); ?>
+    <script>
+        $(document).ready(function () {
+            var post_id = <?php echo $PostID; ?>;
+            var user_id = <?php echo loggedInUserID(); ?>;
+
+            // LIKING
+
+            $('.like').click(function () {
+                $.ajax({
+                    url: "/blog/post/<?php echo $PostID; ?>",
+                    type: 'post',
+                    data: {
+                        'liked': 1,
+                        'post_id': post_id,
+                        'user_id': user_id
+                    }
+                });
+            });
+
+            $('.unlike').click(function () {
+                $.ajax({
+                    url: "/blog/post/<?php echo $PostID; ?>",
+                    type: 'post',
+                    data: {
+                        'unliked': 1,
+                        'post_id': post_id,
+                        'user_id': user_id
+                    }
+                });
+            });
+        });
+    </script>

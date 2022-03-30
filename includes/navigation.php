@@ -33,11 +33,13 @@
                         ?>
                     </ul>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link disabled">Disabled</a>
-                </li>
+                <?php if (isLoggedIn()): ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/blog/admin">Admin Panel</a>
+                    </li>
+                <?php endif;  ?>
             </ul>
-            <form action="/blog/search.php" method="POST" class="d-flex">
+            <form action="/blog/search" method="POST" class="d-flex">
                 <input name="searchstr" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                 <button name="search" class="btn btn-outline-success" type="submit">Search</button>
             </form>

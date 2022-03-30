@@ -1,4 +1,5 @@
 RewriteEngine on
-RewriteRule ^(index|contacts|register)$ $1.php [NC,L]
+RewriteRule ^(index|contacts|register|login|logout|recovery-password|search)$ $1.php [NC,L]
+RewriteRule ^author_posts/([a-z0-9_-]+)$ author_posts.php?au=$1 [NC,L]
 RewriteRule ^post/(\d+)$ post.php?p_id=$1 [NC,L]
 RewriteRule ^category/(\d+)$ category.php?cat=$1 [NC,L]
