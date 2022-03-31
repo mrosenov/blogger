@@ -2,8 +2,8 @@
 
 class Config
 {
-    const SMTP_HOST = 'SMTP SERVER';
-    const SMTP_PORT = 'SMTP Port';
-    const SMTP_USER = 'SMTP User';
-    const SMTP_PASSWORD = 'SMTP Password';
+    const SMTP_HOST = 'HOST';
+    const SMTP_PORT = 'PORT';
+    const SMTP_USER = 'USER';
+    const SMTP_PASSWORD = 'PASS';
 }
